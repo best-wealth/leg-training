@@ -90,3 +90,12 @@
 - [x] Show weights in user's preferred unit (kg/lb)
 - [x] Add Done button to create next session
 - [x] Navigate to home screen after completion
+
+## Phase 14: Achievement Badges System
+- [x] Define badge types and milestone thresholds
+- [x] Create badge data structure and storage
+- [x] Implement badge unlock logic
+- [x] Build badges display screen
+- [x] Add badge notifications on unlock
+- [x] Display badges on achievements tab
+- [x] Track badge progress towards next milestone

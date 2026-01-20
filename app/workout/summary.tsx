@@ -2,9 +2,11 @@ import { ScrollView, Text, View, Pressable, PressableStateCallbackType, Activity
 import { ScreenContainer } from "@/components/screen-container";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
-import { getSessionById, createNewSession, saveSession } from "@/lib/workout-utils";
+import { getSessionById, createNewSession, saveSession, getAllSessions } from "@/lib/workout-utils";
 import { WorkoutSession, ExerciseLog } from "@/lib/types";
 import { getExerciseById } from "@/lib/combined-exercises";
+import { checkAndUnlockBadges } from "@/lib/badge-tracker";
+import { BADGES } from "@/lib/badges";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
@@ -22,6 +24,8 @@ export default function WorkoutSummaryScreen() {
   const [loading, setLoading] = useState(true);
   const [weightExercises, setWeightExercises] = useState<ExerciseWithWeight[]>([]);
   const [defaultWeightUnit, setDefaultWeightUnit] = useState<'kg' | 'lb'>('kg');
+  const [newBadges, setNewBadges] = useState<string[]>([]);
+  const [showingBadges, setShowingBadges] = useState(false);
 
   useEffect(() => {
     loadSessionAndExercises();
@@ -30,14 +34,12 @@ export default function WorkoutSummaryScreen() {
   const loadSessionAndExercises = async () => {
     setLoading(true);
     try {
-      // Load session
       const loadedSession = await getSessionById(sessionId);
       if (!loadedSession) {
         throw new Error('Session not found');
       }
       setSession(loadedSession);
 
-      // Get weight unit preference
       try {
         const settingsJson = await (await import('@react-native-async-storage/async-storage')).default.getItem('@basketball_training_settings');
         if (settingsJson) {
@@ -48,7 +50,6 @@ export default function WorkoutSummaryScreen() {
         console.error('Error loading settings:', error);
       }
 
-      // Extract weight exercises
       const exercises: ExerciseWithWeight[] = [];
       for (const exerciseLog of loadedSession.exercises) {
         const exerciseData = await getExerciseById(exerciseLog.exerciseId);
@@ -69,6 +70,17 @@ export default function WorkoutSummaryScreen() {
     }
   };
 
+  const navigateHome = async () => {
+    try {
+      const nextSessionNumber = session!.sessionNumber + 1;
+      const newSession = createNewSession(nextSessionNumber);
+      await saveSession(newSession);
+      router.push("/" as any);
+    } catch (error) {
+      console.error('Error navigating home:', error);
+    }
+  };
+
   const handleDone = async () => {
     if (!session) return;
 
@@ -77,19 +89,24 @@ export default function WorkoutSummaryScreen() {
     }
 
     try {
-      // Create next session
-      const nextSessionNumber = session.sessionNumber + 1;
-      const newSession = createNewSession(nextSessionNumber);
-      await saveSession(newSession);
-
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      const allSessions = await getAllSessions();
+      const unlockedBadges = await checkAndUnlockBadges(allSessions, session);
+      
+      if (unlockedBadges.length > 0) {
+        setNewBadges(unlockedBadges);
+        setShowingBadges(true);
+        if (Platform.OS !== "web") {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }
+        setTimeout(() => {
+          navigateHome();
+        }, 3000);
+      } else {
+        navigateHome();
       }
-
-      // Navigate to home
-      router.push("/" as any);
     } catch (error) {
-      console.error('Error creating next session:', error);
+      console.error('Error checking badges:', error);
+      navigateHome();
     }
   };
 
@@ -109,24 +126,51 @@ export default function WorkoutSummaryScreen() {
     );
   }
 
+  if (showingBadges && newBadges.length > 0) {
+    return (
+      <ScreenContainer className="items-center justify-center p-6">
+        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+          <View className="items-center gap-6">
+            <Text className="text-6xl">🏆</Text>
+            <Text className="text-3xl font-bold text-foreground text-center">New Badges Unlocked!</Text>
+            
+            <View className="gap-4 w-full">
+              {newBadges.map((badgeId) => {
+                const badge = BADGES[badgeId as keyof typeof BADGES];
+                return (
+                  <View key={badgeId} className="bg-surface rounded-xl p-4 border border-primary items-center gap-2">
+                    <Text className="text-5xl">{badge.icon}</Text>
+                    <Text className="text-lg font-bold text-foreground text-center">{badge.name}</Text>
+                    <Text className="text-sm text-muted text-center">{badge.description}</Text>
+                  </View>
+                );
+              })}
+            </View>
+
+            <Text className="text-sm text-muted text-center mt-4">
+              Redirecting in 3 seconds...
+            </Text>
+          </View>
+        </ScrollView>
+      </ScreenContainer>
+    );
+  }
+
   return (
     <ScreenContainer className="p-6">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex-1 gap-6">
-          {/* Header */}
           <View className="items-center gap-2">
             <Text className="text-5xl">🎉</Text>
             <Text className="text-3xl font-bold text-foreground">Workout Complete!</Text>
             <Text className="text-lg text-muted">Session #{session.sessionNumber}</Text>
           </View>
 
-          {/* Summary Info */}
           <View className="bg-primary rounded-2xl p-6 items-center gap-2">
             <Text className="text-white text-sm">Total Exercises Completed</Text>
             <Text className="text-5xl font-bold text-white">{session.exercises.length}</Text>
           </View>
 
-          {/* Weight Exercises Summary */}
           {weightExercises.length > 0 && (
             <View className="gap-3">
               <Text className="text-lg font-bold text-foreground">Weight Exercises</Text>
@@ -189,7 +233,6 @@ export default function WorkoutSummaryScreen() {
             </View>
           )}
 
-          {/* Stats */}
           <View className="gap-2">
             <View className="bg-surface rounded-xl p-4 border border-border flex-row justify-between">
               <Text className="text-sm text-muted">Session Date</Text>
@@ -205,7 +248,6 @@ export default function WorkoutSummaryScreen() {
             </View>
           </View>
 
-          {/* Done Button */}
           <Pressable
             onPress={handleDone}
             style={({ pressed }: PressableStateCallbackType) => ({

@@ -1,0 +1,244 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BadgeId, BADGES } from './badges';
+import { WorkoutSession } from './types';
+
+const BADGES_KEY = '@basketball_training_badges';
+
+export interface UnlockedBadge {
+  id: BadgeId;
+  unlockedAt: string; // ISO timestamp
+}
+
+/**
+ * Get all unlocked badges
+ */
+export async function getUnlockedBadges(): Promise<UnlockedBadge[]> {
+  try {
+    const data = await AsyncStorage.getItem(BADGES_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading badges:', error);
+    return [];
+  }
+}
+
+/**
+ * Check if a badge is unlocked
+ */
+export async function isBadgeUnlocked(badgeId: BadgeId): Promise<boolean> {
+  const badges = await getUnlockedBadges();
+  return badges.some(b => b.id === badgeId);
+}
+
+/**
+ * Unlock a badge
+ */
+export async function unlockBadge(badgeId: BadgeId): Promise<boolean> {
+  const badges = await getUnlockedBadges();
+  
+  // Check if already unlocked
+  if (badges.some(b => b.id === badgeId)) {
+    return false; // Already unlocked
+  }
+
+  badges.push({
+    id: badgeId,
+    unlockedAt: new Date().toISOString(),
+  });
+
+  try {
+    await AsyncStorage.setItem(BADGES_KEY, JSON.stringify(badges));
+    return true; // Newly unlocked
+  } catch (error) {
+    console.error('Error saving badge:', error);
+    throw error;
+  }
+}
+
+/**
+ * Check and unlock badges based on session completion
+ */
+export async function checkAndUnlockBadges(
+  sessions: WorkoutSession[],
+  currentSession: WorkoutSession
+): Promise<BadgeId[]> {
+  const newlyUnlocked: BadgeId[] = [];
+
+  // Session count badges
+  const sessionCount = sessions.length;
+
+  if (sessionCount === 1 && !(await isBadgeUnlocked('first_session'))) {
+    if (await unlockBadge('first_session')) {
+      newlyUnlocked.push('first_session');
+    }
+  }
+
+  if (sessionCount === 5 && !(await isBadgeUnlocked('five_sessions'))) {
+    if (await unlockBadge('five_sessions')) {
+      newlyUnlocked.push('five_sessions');
+    }
+  }
+
+  if (sessionCount === 10 && !(await isBadgeUnlocked('ten_sessions'))) {
+    if (await unlockBadge('ten_sessions')) {
+      newlyUnlocked.push('ten_sessions');
+    }
+  }
+
+  if (sessionCount === 25 && !(await isBadgeUnlocked('twenty_five_sessions'))) {
+    if (await unlockBadge('twenty_five_sessions')) {
+      newlyUnlocked.push('twenty_five_sessions');
+    }
+  }
+
+  if (sessionCount === 50 && !(await isBadgeUnlocked('fifty_sessions'))) {
+    if (await unlockBadge('fifty_sessions')) {
+      newlyUnlocked.push('fifty_sessions');
+    }
+  }
+
+  if (sessionCount === 100 && !(await isBadgeUnlocked('hundred_sessions'))) {
+    if (await unlockBadge('hundred_sessions')) {
+      newlyUnlocked.push('hundred_sessions');
+    }
+  }
+
+  // Strength badges - check max weights in current session
+  for (const exercise of currentSession.exercises) {
+    if (exercise.weightKg) {
+      // Leg curl badges
+      if (exercise.exerciseName.includes('Leg Curl')) {
+        if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('leg_curl_100kg'))) {
+          if (await unlockBadge('leg_curl_100kg')) {
+            newlyUnlocked.push('leg_curl_100kg');
+          }
+        } else if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('leg_curl_75kg'))) {
+          if (await unlockBadge('leg_curl_75kg')) {
+            newlyUnlocked.push('leg_curl_75kg');
+          }
+        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('leg_curl_50kg'))) {
+          if (await unlockBadge('leg_curl_50kg')) {
+            newlyUnlocked.push('leg_curl_50kg');
+          }
+        }
+      }
+
+      // Leg raise badges
+      if (exercise.exerciseName.includes('Leg Raise')) {
+        if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('leg_raise_100kg'))) {
+          if (await unlockBadge('leg_raise_100kg')) {
+            newlyUnlocked.push('leg_raise_100kg');
+          }
+        } else if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('leg_raise_75kg'))) {
+          if (await unlockBadge('leg_raise_75kg')) {
+            newlyUnlocked.push('leg_raise_75kg');
+          }
+        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('leg_raise_50kg'))) {
+          if (await unlockBadge('leg_raise_50kg')) {
+            newlyUnlocked.push('leg_raise_50kg');
+          }
+        }
+      }
+
+      // Calf raise badges
+      if (exercise.exerciseName.includes('Calf Raise')) {
+        if (exercise.weightKg >= 150 && !(await isBadgeUnlocked('calf_raise_150kg'))) {
+          if (await unlockBadge('calf_raise_150kg')) {
+            newlyUnlocked.push('calf_raise_150kg');
+          }
+        } else if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('calf_raise_100kg'))) {
+          if (await unlockBadge('calf_raise_100kg')) {
+            newlyUnlocked.push('calf_raise_100kg');
+          }
+        } else if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('calf_raise_75kg'))) {
+          if (await unlockBadge('calf_raise_75kg')) {
+            newlyUnlocked.push('calf_raise_75kg');
+          }
+        }
+      }
+
+      // Hip thrust badges
+      if (exercise.exerciseName.includes('Hip Thrust')) {
+        if (exercise.weightKg >= 200 && !(await isBadgeUnlocked('hip_thrust_200kg'))) {
+          if (await unlockBadge('hip_thrust_200kg')) {
+            newlyUnlocked.push('hip_thrust_200kg');
+          }
+        } else if (exercise.weightKg >= 150 && !(await isBadgeUnlocked('hip_thrust_150kg'))) {
+          if (await unlockBadge('hip_thrust_150kg')) {
+            newlyUnlocked.push('hip_thrust_150kg');
+          }
+        } else if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('hip_thrust_100kg'))) {
+          if (await unlockBadge('hip_thrust_100kg')) {
+            newlyUnlocked.push('hip_thrust_100kg');
+          }
+        }
+      }
+    }
+
+    // Box jump badges
+    if (exercise.boxJumpInches) {
+      if (exercise.boxJumpInches >= 30 && !(await isBadgeUnlocked('box_jump_30in'))) {
+        if (await unlockBadge('box_jump_30in')) {
+          newlyUnlocked.push('box_jump_30in');
+        }
+      } else if (exercise.boxJumpInches >= 24 && !(await isBadgeUnlocked('box_jump_24in'))) {
+        if (await unlockBadge('box_jump_24in')) {
+          newlyUnlocked.push('box_jump_24in');
+        }
+      } else if (exercise.boxJumpInches >= 20 && !(await isBadgeUnlocked('box_jump_20in'))) {
+        if (await unlockBadge('box_jump_20in')) {
+          newlyUnlocked.push('box_jump_20in');
+        }
+      }
+    }
+  }
+
+  return newlyUnlocked;
+}
+
+/**
+ * Get badge progress towards next unlock
+ */
+export async function getBadgeProgress(badgeId: BadgeId, sessions: WorkoutSession[]) {
+  const badge = BADGES[badgeId];
+  if (!badge) return null;
+
+  let current = 0;
+  let target = 0;
+
+  switch (badgeId) {
+    case 'first_session':
+      target = 1;
+      current = sessions.length > 0 ? 1 : 0;
+      break;
+    case 'five_sessions':
+      target = 5;
+      current = Math.min(sessions.length, 5);
+      break;
+    case 'ten_sessions':
+      target = 10;
+      current = Math.min(sessions.length, 10);
+      break;
+    case 'twenty_five_sessions':
+      target = 25;
+      current = Math.min(sessions.length, 25);
+      break;
+    case 'fifty_sessions':
+      target = 50;
+      current = Math.min(sessions.length, 50);
+      break;
+    case 'hundred_sessions':
+      target = 100;
+      current = Math.min(sessions.length, 100);
+      break;
+    default:
+      return null;
+  }
+
+  return {
+    badgeId,
+    current,
+    target,
+    percentage: (current / target) * 100,
+  };
+}
