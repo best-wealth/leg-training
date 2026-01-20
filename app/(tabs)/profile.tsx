@@ -1,13 +1,15 @@
-import { ScrollView, Text, View, TouchableOpacity, Alert } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, Alert, Pressable, PressableStateCallbackType } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { getSettings, saveSettings } from "@/lib/workout-utils";
+import { useRouter } from "expo-router";
 import { AppSettings } from "@/lib/types";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const [settings, setSettings] = useState<AppSettings>({ defaultWeightUnit: 'kg' });
 
   useFocusEffect(
@@ -123,6 +125,28 @@ export default function ProfileScreen() {
               <Text className="text-xs text-muted mt-3">Version 1.0.0</Text>
             </View>
           </View>
+
+          {/* Custom Exercises Link */}
+          <Pressable
+            onPress={() => router.push("/exercises/custom" as any)}
+            style={({ pressed }: PressableStateCallbackType) => ({
+              transform: [{ scale: pressed ? 0.97 : 1 }],
+              opacity: pressed ? 0.9 : 1,
+            })}
+            className="bg-surface rounded-xl p-4 border border-border"
+          >
+            <View className="flex-row justify-between items-center">
+              <View>
+                <Text className="text-base font-semibold text-foreground">
+                  Custom Exercises
+                </Text>
+                <Text className="text-sm text-muted mt-1">
+                  Create and manage your own exercises
+                </Text>
+              </View>
+              <Text className="text-2xl">→</Text>
+            </View>
+          </Pressable>
 
           {/* Info Card */}
           <View className="bg-primary rounded-xl p-4">

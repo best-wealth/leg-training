@@ -2,7 +2,7 @@
  * Data models for Basketball Leg & Hip Training app
  */
 
-export type ExerciseType = 'warmup' | 'stretch' | 'strength' | 'finisher';
+export type ExerciseType = 'warmup' | 'stretch' | 'strength' | 'finisher' | 'custom';
 
 export interface Exercise {
   id: string;
@@ -43,6 +43,18 @@ export interface PersonalRecord {
   maxWeightLb: number;
   achievedAt: string; // ISO timestamp
   sessionNumber: number;
+}
+
+export interface CustomExercise {
+  id: string;
+  name: string;
+  type: ExerciseType;
+  reps?: number;
+  duration?: number;
+  requiresWeight?: boolean;
+  requiresHeight?: boolean;
+  instructions: string;
+  createdAt: string;
 }
 
 export interface AppSettings {

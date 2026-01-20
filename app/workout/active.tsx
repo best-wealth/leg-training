@@ -4,7 +4,8 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { getSessionById, saveSession, kgToLb, lbToKg } from "@/lib/workout-utils";
 import { WorkoutSession, ExerciseLog } from "@/lib/types";
-import { getExerciseById } from "@/lib/exercises";
+import { getExerciseById as getDefaultExerciseById } from "@/lib/exercises";
+import { getExerciseById } from "@/lib/combined-exercises";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
@@ -95,10 +96,10 @@ export default function ActiveWorkoutScreen() {
     }
 
     const currentExercise = session.exercises[currentExerciseIndex];
-    const exerciseData = getExerciseById(currentExercise.exerciseId);
+    const exerciseDataLoaded = await getExerciseById(currentExercise.exerciseId);
 
     // Validate inputs
-    if (exerciseData?.requiresWeight) {
+    if (exerciseDataLoaded?.requiresWeight) {
       const kg = parseFloat(weightKg);
       if (isNaN(kg) || kg <= 0) {
         Alert.alert("Invalid Weight", "Please enter a valid weight.");
@@ -106,7 +107,7 @@ export default function ActiveWorkoutScreen() {
       }
     }
 
-    if (exerciseData?.requiresHeight) {
+    if (exerciseDataLoaded?.requiresHeight) {
       const inches = parseFloat(boxJumpInches);
       if (isNaN(inches) || inches <= 0) {
         Alert.alert("Invalid Height", "Please enter a valid box height in inches.");
@@ -179,13 +180,34 @@ export default function ActiveWorkoutScreen() {
   }
 
   const currentExerciseLog = session.exercises[currentExerciseIndex];
-  const exerciseData = getExerciseById(currentExerciseLog.exerciseId);
+  const [exerciseData, setExerciseData] = useState<Awaited<ReturnType<typeof getExerciseById>> | null>(null);
+  const [exerciseLoading, setExerciseLoading] = useState(true);
+
+  useEffect(() => {
+    const loadExerciseData = async () => {
+      setExerciseLoading(true);
+      try {
+        const data = await getExerciseById(currentExerciseLog.exerciseId);
+        setExerciseData(data || null);
+      } catch (error) {
+        console.error('Error loading exercise data:', error);
+      } finally {
+        setExerciseLoading(false);
+      }
+    };
+    loadExerciseData();
+  }, [currentExerciseLog.exerciseId]);
+
   const progress = ((currentExerciseIndex + 1) / session.exercises.length) * 100;
 
-  if (!exerciseData) {
+  if (exerciseLoading || !exerciseData) {
     return (
       <ScreenContainer className="items-center justify-center">
-        <Text className="text-foreground">Exercise not found</Text>
+        {exerciseLoading ? (
+          <ActivityIndicator size="large" color="#FF6B35" />
+        ) : (
+          <Text className="text-foreground">Exercise not found</Text>
+        )}
       </ScreenContainer>
     );
   }

@@ -66,6 +66,17 @@
 - [x] Test on both light and dark modes
 
 ## Phase 10: Final Delivery
-- [ ] Create checkpoint for deployment
-- [ ] Generate QR code for testing
-- [ ] Provide user with project files and instructions
+- [x] Create checkpoint for deployment
+- [x] Generate QR code for testing
+- [x] Provide user with project files and instructions
+
+## Phase 11: Custom Exercises Feature
+- [x] Extend data types to support custom exercises
+- [x] Create custom exercise storage in AsyncStorage
+- [x] Build custom exercises management screen
+- [x] Add "Add Custom Exercise" modal/form
+- [x] Implement edit custom exercise functionality
+- [x] Implement delete custom exercise functionality
+- [x] Allow users to insert custom exercises into workout
+- [x] Update active workout to support custom exercises
+- [x] Test custom exercise creation and tracking
