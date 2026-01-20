@@ -1,0 +1,139 @@
+import { ScrollView, Text, View, TouchableOpacity, Alert } from "react-native";
+import { ScreenContainer } from "@/components/screen-container";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { getSettings, saveSettings } from "@/lib/workout-utils";
+import { AppSettings } from "@/lib/types";
+import * as Haptics from "expo-haptics";
+import { Platform } from "react-native";
+
+export default function ProfileScreen() {
+  const [settings, setSettings] = useState<AppSettings>({ defaultWeightUnit: 'kg' });
+
+  useFocusEffect(
+    useCallback(() => {
+      loadSettings();
+    }, [])
+  );
+
+  const loadSettings = async () => {
+    try {
+      const loadedSettings = await getSettings();
+      setSettings(loadedSettings);
+    } catch (error) {
+      console.error('Error loading settings:', error);
+    }
+  };
+
+  const handleToggleUnit = async () => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+
+    const newUnit: 'kg' | 'lb' = settings.defaultWeightUnit === 'kg' ? 'lb' : 'kg';
+    const newSettings: AppSettings = { ...settings, defaultWeightUnit: newUnit };
+    
+    try {
+      await saveSettings(newSettings);
+      setSettings(newSettings);
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      Alert.alert('Error', 'Failed to save settings');
+    }
+  };
+
+  return (
+    <ScreenContainer className="p-6">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="flex-1 gap-6">
+          <View>
+            <Text className="text-3xl font-bold text-foreground">Profile</Text>
+            <Text className="text-sm text-muted mt-1">App settings and preferences</Text>
+          </View>
+
+          {/* Settings Section */}
+          <View className="gap-4">
+            <Text className="text-lg font-semibold text-foreground">Preferences</Text>
+
+            {/* Weight Unit Toggle */}
+            <View className="bg-surface rounded-xl p-4 border border-border">
+              <View className="flex-row justify-between items-center">
+                <View className="flex-1">
+                  <Text className="text-base font-semibold text-foreground">
+                    Default Weight Unit
+                  </Text>
+                  <Text className="text-sm text-muted mt-1">
+                    Choose your preferred unit for weight input
+                  </Text>
+                </View>
+              </View>
+
+              <View className="flex-row gap-3 mt-4">
+                <TouchableOpacity
+                  onPress={handleToggleUnit}
+                  activeOpacity={0.7}
+                  className={`flex-1 py-3 rounded-lg border ${
+                    settings.defaultWeightUnit === 'kg'
+                      ? 'bg-primary border-primary'
+                      : 'bg-background border-border'
+                  }`}
+                >
+                  <Text
+                    className={`text-center font-semibold ${
+                      settings.defaultWeightUnit === 'kg' ? 'text-white' : 'text-muted'
+                    }`}
+                  >
+                    Kilograms (kg)
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleToggleUnit}
+                  activeOpacity={0.7}
+                  className={`flex-1 py-3 rounded-lg border ${
+                    settings.defaultWeightUnit === 'lb'
+                      ? 'bg-primary border-primary'
+                      : 'bg-background border-border'
+                  }`}
+                >
+                  <Text
+                    className={`text-center font-semibold ${
+                      settings.defaultWeightUnit === 'lb' ? 'text-white' : 'text-muted'
+                    }`}
+                  >
+                    Pounds (lb)
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* About Section */}
+          <View className="gap-4">
+            <Text className="text-lg font-semibold text-foreground">About</Text>
+
+            <View className="bg-surface rounded-xl p-4 border border-border">
+              <Text className="text-base font-semibold text-foreground mb-2">
+                Hoop Legs Training
+              </Text>
+              <Text className="text-sm text-muted leading-relaxed">
+                A comprehensive resistance training program designed for basketball players, 
+                targeting leg and hip strength to improve performance on the court.
+              </Text>
+              <Text className="text-xs text-muted mt-3">Version 1.0.0</Text>
+            </View>
+          </View>
+
+          {/* Info Card */}
+          <View className="bg-primary rounded-xl p-4">
+            <Text className="text-white text-sm leading-relaxed">
+              💡 <Text className="font-semibold">Tip:</Text> Track your workouts consistently 
+              to see your progress over time. Your personal records are automatically calculated 
+              from your completed sessions.
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </ScreenContainer>
+  );
+}
