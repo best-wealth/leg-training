@@ -111,3 +111,6 @@
 
 ## Phase 16: Bug Fixes - Badge Redirect
 - [x] Fix badge notification screen to redirect to homepage instead of next session
+
+## Phase 17: Bug Fix - Missing Start Session Button
+- [x] Fix missing "Start Session" button on home page

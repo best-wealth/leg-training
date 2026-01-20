@@ -151,20 +151,18 @@ export default function HomeScreen() {
           </View>
 
           {/* Action Button */}
-          <View className="items-center mt-4">
-            <Pressable
-              onPress={activeSession ? handleContinueWorkout : handleStartWorkout}
-              style={({ pressed }: PressableStateCallbackType) => ({
-                transform: [{ scale: pressed ? 0.97 : 1 }],
-                opacity: pressed ? 0.9 : 1,
-              })}
-              className="bg-primary px-8 py-4 rounded-full w-full max-w-xs"
-            >
-              <Text className="text-white text-center font-bold text-lg">
-                {activeSession ? 'Continue Workout' : 'Start Workout'}
-              </Text>
-            </Pressable>
-          </View>
+          <Pressable
+            onPress={activeSession ? handleContinueWorkout : handleStartWorkout}
+            style={({ pressed }: PressableStateCallbackType) => ({
+              transform: [{ scale: pressed ? 0.97 : 1 }],
+              opacity: pressed ? 0.9 : 1,
+            })}
+            className="bg-primary px-8 py-4 rounded-full w-full mt-4"
+          >
+            <Text className="text-white text-center font-bold text-lg">
+              {activeSession ? 'Continue Workout' : 'Start Workout'}
+            </Text>
+          </Pressable>
 
           {/* Instructions */}
           <View className="bg-surface rounded-xl p-4 border border-border mt-2">
