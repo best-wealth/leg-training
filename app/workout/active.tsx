@@ -20,6 +20,8 @@ export default function ActiveWorkoutScreen() {
   const [boxJumpInches, setBoxJumpInches] = useState<string>("");
   const [timer, setTimer] = useState<number>(0);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [exerciseData, setExerciseData] = useState<Awaited<ReturnType<typeof getExerciseById>> | null>(null);
+  const [exerciseLoading, setExerciseLoading] = useState(true);
 
   useEffect(() => {
     loadSession();
@@ -36,6 +38,24 @@ export default function ActiveWorkoutScreen() {
       if (interval) clearInterval(interval);
     };
   }, [timerRunning]);
+
+  useEffect(() => {
+    if (!session || session.exercises.length === 0) return;
+
+    const currentExerciseLog = session.exercises[currentExerciseIndex];
+    const loadExerciseData = async () => {
+      setExerciseLoading(true);
+      try {
+        const data = await getExerciseById(currentExerciseLog.exerciseId);
+        setExerciseData(data || null);
+      } catch (error) {
+        console.error('Error loading exercise data:', error);
+      } finally {
+        setExerciseLoading(false);
+      }
+    };
+    loadExerciseData();
+  }, [currentExerciseIndex, session?.exercises.length]);
 
   const loadSession = async () => {
     setLoading(true);
@@ -179,27 +199,6 @@ export default function ActiveWorkoutScreen() {
     );
   }
 
-  const currentExerciseLog = session.exercises[currentExerciseIndex];
-  const [exerciseData, setExerciseData] = useState<Awaited<ReturnType<typeof getExerciseById>> | null>(null);
-  const [exerciseLoading, setExerciseLoading] = useState(true);
-
-  useEffect(() => {
-    const loadExerciseData = async () => {
-      setExerciseLoading(true);
-      try {
-        const data = await getExerciseById(currentExerciseLog.exerciseId);
-        setExerciseData(data || null);
-      } catch (error) {
-        console.error('Error loading exercise data:', error);
-      } finally {
-        setExerciseLoading(false);
-      }
-    };
-    loadExerciseData();
-  }, [currentExerciseLog.exerciseId]);
-
-  const progress = ((currentExerciseIndex + 1) / session.exercises.length) * 100;
-
   if (exerciseLoading || !exerciseData) {
     return (
       <ScreenContainer className="items-center justify-center">
@@ -211,6 +210,9 @@ export default function ActiveWorkoutScreen() {
       </ScreenContainer>
     );
   }
+
+  const currentExerciseLog = session.exercises[currentExerciseIndex];
+  const progress = ((currentExerciseIndex + 1) / session.exercises.length) * 100;
 
   return (
     <ScreenContainer className="p-6">

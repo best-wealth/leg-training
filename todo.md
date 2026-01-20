@@ -80,3 +80,6 @@
 - [x] Allow users to insert custom exercises into workout
 - [x] Update active workout to support custom exercises
 - [x] Test custom exercise creation and tracking
+
+## Phase 12: Bug Fixes
+- [x] Fix React hooks rendering error in active workout screen
