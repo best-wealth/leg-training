@@ -7,6 +7,7 @@ import { WorkoutSession, ExerciseLog } from "@/lib/types";
 import { getExerciseById } from "@/lib/combined-exercises";
 import { checkAndUnlockBadges } from "@/lib/badge-tracker";
 import { BADGES } from "@/lib/badges";
+import { checkForNewPRs, PRNotification } from "@/lib/pr-tracker";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
@@ -26,6 +27,9 @@ export default function WorkoutSummaryScreen() {
   const [defaultWeightUnit, setDefaultWeightUnit] = useState<'kg' | 'lb'>('kg');
   const [newBadges, setNewBadges] = useState<string[]>([]);
   const [showingBadges, setShowingBadges] = useState(false);
+  const [newPRs, setNewPRs] = useState<PRNotification[]>([]);
+  const [showingPRs, setShowingPRs] = useState(false);
+  const [currentPRIndex, setCurrentPRIndex] = useState(0);
 
   useEffect(() => {
     loadSessionAndExercises();
@@ -70,14 +74,17 @@ export default function WorkoutSummaryScreen() {
     }
   };
 
-  const navigateHome = async () => {
+  const navigateToNextSession = async () => {
     try {
       const nextSessionNumber = session!.sessionNumber + 1;
       const newSession = createNewSession(nextSessionNumber);
       await saveSession(newSession);
-      router.push("/" as any);
+      router.push({
+        pathname: "/workout/active" as any,
+        params: { sessionId: newSession.sessionId },
+      });
     } catch (error) {
-      console.error('Error navigating home:', error);
+      console.error('Error navigating to next session:', error);
     }
   };
 
@@ -90,8 +97,21 @@ export default function WorkoutSummaryScreen() {
 
     try {
       const allSessions = await getAllSessions();
-      const unlockedBadges = await checkAndUnlockBadges(allSessions, session);
       
+      // Check for new PRs
+      const prs = checkForNewPRs(allSessions, session, defaultWeightUnit as 'kg' | 'lb');
+      if (prs.length > 0) {
+        setNewPRs(prs);
+        setShowingPRs(true);
+        setCurrentPRIndex(0);
+        if (Platform.OS !== "web") {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }
+        return;
+      }
+
+      // Check for new badges
+      const unlockedBadges = await checkAndUnlockBadges(allSessions, session);
       if (unlockedBadges.length > 0) {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
@@ -99,14 +119,46 @@ export default function WorkoutSummaryScreen() {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         }
         setTimeout(() => {
-          navigateHome();
+          navigateToNextSession();
         }, 3000);
       } else {
-        navigateHome();
+        navigateToNextSession();
+      }
+    } catch (error) {
+      console.error('Error checking PRs and badges:', error);
+      navigateToNextSession();
+    }
+  };
+
+  const handleNextPR = () => {
+    if (currentPRIndex < newPRs.length - 1) {
+      setCurrentPRIndex(currentPRIndex + 1);
+    } else {
+      // All PRs shown, now check badges
+      setShowingPRs(false);
+      handleBadgesAfterPRs();
+    }
+  };
+
+  const handleBadgesAfterPRs = async () => {
+    try {
+      const allSessions = await getAllSessions();
+      const unlockedBadges = await checkAndUnlockBadges(allSessions, session!);
+      if (unlockedBadges.length > 0) {
+        setNewBadges(unlockedBadges);
+        setShowingBadges(true);
+        if (Platform.OS !== "web") {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }
+        setTimeout(() => {
+          navigateToNextSession();
+        }, 3000);
+      } else {
+        navigateToNextSession();
       }
     } catch (error) {
       console.error('Error checking badges:', error);
-      navigateHome();
+      navigateToNextSession();
     }
   };
 
@@ -126,6 +178,71 @@ export default function WorkoutSummaryScreen() {
     );
   }
 
+  // Show PR notification
+  if (showingPRs && newPRs.length > 0) {
+    const currentPR = newPRs[currentPRIndex];
+    return (
+      <ScreenContainer className="items-center justify-center p-6">
+        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+          <View className="items-center gap-6">
+            <Text className="text-6xl">🏅</Text>
+            <Text className="text-3xl font-bold text-foreground text-center">New Personal Record!</Text>
+            
+            <View className="bg-surface rounded-xl p-6 border border-primary w-full gap-4">
+              <Text className="text-xl font-bold text-foreground text-center">
+                {currentPR.exerciseName}
+              </Text>
+              
+              <View className="items-center gap-2">
+                <Text className="text-5xl font-bold text-primary">
+                  {currentPR.newValue.toFixed(1)}
+                </Text>
+                <Text className="text-lg text-muted">{currentPR.unit}</Text>
+              </View>
+
+              {currentPR.previousValue > 0 && (
+                <View className="bg-background rounded-lg p-4 gap-2">
+                  <View className="flex-row justify-between">
+                    <Text className="text-sm text-muted">Previous PR</Text>
+                    <Text className="text-sm font-semibold text-foreground">
+                      {currentPR.previousValue.toFixed(1)} {currentPR.unit}
+                    </Text>
+                  </View>
+                  <View className="flex-row justify-between">
+                    <Text className="text-sm text-muted">Improvement</Text>
+                    <Text className="text-sm font-semibold text-success">
+                      +{currentPR.improvementAbsolute.toFixed(1)} {currentPR.unit} ({currentPR.improvementPercentage.toFixed(1)}%)
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
+
+            <View className="flex-row gap-2 w-full">
+              <Pressable
+                onPress={handleNextPR}
+                style={({ pressed }: PressableStateCallbackType) => ({
+                  transform: [{ scale: pressed ? 0.97 : 1 }],
+                  opacity: pressed ? 0.9 : 1,
+                })}
+                className="flex-1 bg-primary px-6 py-3 rounded-full"
+              >
+                <Text className="text-white text-center font-bold">
+                  {currentPRIndex < newPRs.length - 1 ? 'Next PR' : 'Continue'}
+                </Text>
+              </Pressable>
+            </View>
+
+            <Text className="text-xs text-muted text-center">
+              {currentPRIndex + 1} of {newPRs.length} PRs
+            </Text>
+          </View>
+        </ScrollView>
+      </ScreenContainer>
+    );
+  }
+
+  // Show badge notification
   if (showingBadges && newBadges.length > 0) {
     return (
       <ScreenContainer className="items-center justify-center p-6">
@@ -248,18 +365,33 @@ export default function WorkoutSummaryScreen() {
             </View>
           </View>
 
-          <Pressable
-            onPress={handleDone}
-            style={({ pressed }: PressableStateCallbackType) => ({
-              transform: [{ scale: pressed ? 0.97 : 1 }],
-              opacity: pressed ? 0.9 : 1,
-            })}
-            className="bg-success px-8 py-4 rounded-full w-full mt-4"
-          >
-            <Text className="text-white text-center font-bold text-lg">
-              Done - Start Next Session
-            </Text>
-          </Pressable>
+          <View className="gap-3 mt-4">
+            <Pressable
+              onPress={handleDone}
+              style={({ pressed }: PressableStateCallbackType) => ({
+                transform: [{ scale: pressed ? 0.97 : 1 }],
+                opacity: pressed ? 0.9 : 1,
+              })}
+              className="bg-success px-8 py-4 rounded-full w-full"
+            >
+              <Text className="text-white text-center font-bold text-lg">
+                Done
+              </Text>
+            </Pressable>
+
+            <Pressable
+              onPress={navigateToNextSession}
+              style={({ pressed }: PressableStateCallbackType) => ({
+                transform: [{ scale: pressed ? 0.97 : 1 }],
+                opacity: pressed ? 0.9 : 1,
+              })}
+              className="bg-primary px-8 py-4 rounded-full w-full"
+            >
+              <Text className="text-white text-center font-bold text-lg">
+                Next Session →
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
     </ScreenContainer>

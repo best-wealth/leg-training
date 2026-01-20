@@ -99,3 +99,12 @@
 - [x] Add badge notifications on unlock
 - [x] Display badges on achievements tab
 - [x] Track badge progress towards next milestone
+
+## Phase 15: Personal Record Tracking & Notifications
+- [x] Create PR tracking utility functions
+- [x] Detect when user sets new personal record
+- [x] Calculate percentage improvement over previous PR
+- [x] Create PR notification screen with celebration
+- [x] Display PR details (weight/height, improvement %)
+- [x] Add Next Session button to summary page
+- [x] Navigate to next session on button click
