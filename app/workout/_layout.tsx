@@ -21,6 +21,13 @@ export default function WorkoutLayout() {
           headerBackTitle: "Home",
         }}
       />
+      <Stack.Screen
+        name="summary"
+        options={{
+          title: "Workout Summary",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }

@@ -83,3 +83,10 @@
 
 ## Phase 12: Bug Fixes
 - [x] Fix React hooks rendering error in active workout screen
+
+## Phase 13: Workout Completion Summary
+- [x] Create workout summary screen component
+- [x] Display all weight exercises with recorded weights
+- [x] Show weights in user's preferred unit (kg/lb)
+- [x] Add Done button to create next session
+- [x] Navigate to home screen after completion

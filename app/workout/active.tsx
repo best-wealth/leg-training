@@ -165,11 +165,11 @@ export default function ActiveWorkoutScreen() {
       if (Platform.OS !== "web") {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
-      Alert.alert(
-        "Workout Complete! 🎉",
-        `Congratulations! You completed Session #${session.sessionNumber}.`,
-        [{ text: "OK", onPress: () => router.back() }]
-      );
+      // Navigate to summary screen
+      router.push({
+        pathname: "/workout/summary" as any,
+        params: { sessionId: updatedSession.sessionId },
+      });
     } else {
       // Move to next exercise
       const nextIndex = currentExerciseIndex + 1;
