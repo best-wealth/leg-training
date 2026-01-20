@@ -108,3 +108,6 @@
 - [x] Display PR details (weight/height, improvement %)
 - [x] Add Next Session button to summary page
 - [x] Navigate to next session on button click
+
+## Phase 16: Bug Fixes - Badge Redirect
+- [x] Fix badge notification screen to redirect to homepage instead of next session

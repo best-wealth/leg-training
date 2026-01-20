@@ -151,7 +151,7 @@ export default function WorkoutSummaryScreen() {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         }
         setTimeout(() => {
-          navigateToNextSession();
+          navigateToHomepage();
         }, 3000);
       } else {
         navigateToNextSession();
@@ -160,6 +160,10 @@ export default function WorkoutSummaryScreen() {
       console.error('Error checking badges:', error);
       navigateToNextSession();
     }
+  };
+
+  const navigateToHomepage = () => {
+    router.push("/" as any);
   };
 
   if (loading) {
