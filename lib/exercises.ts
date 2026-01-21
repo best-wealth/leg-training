@@ -20,21 +20,21 @@ export const EXERCISES: Exercise[] = [
     name: 'Hamstring Stretches',
     type: 'stretch',
     duration: 180, // 3 minutes
-    instructions: 'Stretch your hamstrings gently. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your hamstrings gently. Hold each stretch for 30 seconds.',
   },
   {
     id: 'calf-stretch-1',
     name: 'Calf Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your calves. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your calves. Hold each stretch for 30 seconds.',
   },
   {
     id: 'quad-stretch-1',
     name: 'Quad Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your quadriceps. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your quadriceps. Hold each stretch for 30 seconds.',
   },
   
   // Strength Round 1
@@ -77,21 +77,21 @@ export const EXERCISES: Exercise[] = [
     name: 'Hamstring Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your hamstrings gently. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your hamstrings gently. Hold each stretch for 30 seconds.',
   },
   {
     id: 'calf-stretch-2',
     name: 'Calf Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your calves. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your calves. Hold each stretch for 30 seconds.',
   },
   {
     id: 'quad-stretch-2',
     name: 'Quad Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your quadriceps. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your quadriceps. Hold each stretch for 30 seconds.',
   },
   
   // Strength Round 2
@@ -134,21 +134,21 @@ export const EXERCISES: Exercise[] = [
     name: 'Hamstring Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your hamstrings gently. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your hamstrings gently. Hold each stretch for 30 seconds.',
   },
   {
     id: 'calf-stretch-3',
     name: 'Calf Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your calves. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your calves. Hold each stretch for 30 seconds.',
   },
   {
     id: 'quad-stretch-3',
     name: 'Quad Stretches',
     type: 'stretch',
     duration: 180,
-    instructions: 'Stretch your quadriceps. Hold each stretch for 30 seconds, repeat 3 times per leg.',
+    instructions: 'Stretch your quadriceps. Hold each stretch for 30 seconds.',
   },
   
   // Finisher

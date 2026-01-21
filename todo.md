@@ -149,3 +149,8 @@
 ## Phase 22: App Title Update
 - [x] Update app title to "Leg Training 4 Ballers" in homepage
 - [x] Update app title in app.config.ts
+
+## Phase 23: Remove Stretching Repeat Instructions
+- [x] Remove "repeat 3 times" from hamstring stretches
+- [x] Remove "repeat 3 times" from calf stretches
+- [x] Remove "repeat 3 times" from quad stretches
