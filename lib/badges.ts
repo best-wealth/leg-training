@@ -23,17 +23,14 @@ export type BadgeId =
   | 'hip_thrust_200kg'
   | 'box_jump_20in'
   | 'box_jump_24in'
-  | 'box_jump_30in'
-  | 'consistent_trainer_7days'
-  | 'consistent_trainer_30days'
-  | 'consistent_trainer_100days';
+  | 'box_jump_30in';
 
 export interface Badge {
   id: BadgeId;
   name: string;
   description: string;
   icon: string;
-  category: 'sessions' | 'strength' | 'plyometric' | 'consistency';
+  category: 'sessions' | 'strength' | 'plyometric';
   unlockedAt?: string; // ISO timestamp
 }
 
@@ -204,28 +201,7 @@ export const BADGES: Record<BadgeId, Omit<Badge, 'unlockedAt'>> = {
     category: 'plyometric',
   },
 
-  // Consistency milestones
-  consistent_trainer_7days: {
-    id: 'consistent_trainer_7days',
-    name: 'Weekly Warrior',
-    description: 'Train for 7 consecutive days',
-    icon: '📅',
-    category: 'consistency',
-  },
-  consistent_trainer_30days: {
-    id: 'consistent_trainer_30days',
-    name: 'Monthly Champion',
-    description: 'Train for 30 consecutive days',
-    icon: '📅',
-    category: 'consistency',
-  },
-  consistent_trainer_100days: {
-    id: 'consistent_trainer_100days',
-    name: 'Century Athlete',
-    description: 'Train for 100 consecutive days',
-    icon: '📅',
-    category: 'consistency',
-  },
+
 };
 
 export function getBadgeById(id: BadgeId): Badge | undefined {

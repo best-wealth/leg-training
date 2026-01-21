@@ -131,3 +131,6 @@
 
 ## Phase 19: Exercise Illustration Updates
 - [x] Regenerate hip thrust illustration with barbell over hips
+
+## Phase 20: Badge System Updates
+- [x] Remove consistency streak achievement badges
