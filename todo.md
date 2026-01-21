@@ -145,3 +145,7 @@
 - [x] Implement sharing to Twitter/X
 - [x] Implement sharing to Facebook
 - [x] Implement sharing to Instagram (copy to clipboard)
+
+## Phase 22: App Title Update
+- [x] Update app title to "Leg Training 4 Ballers" in homepage
+- [x] Update app title in app.config.ts
