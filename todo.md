@@ -128,3 +128,6 @@
 - [x] Create animation component to display exercises
 - [x] Integrate animations into active workout screen
 - [x] Test animations on different screen sizes
+
+## Phase 19: Exercise Illustration Updates
+- [x] Regenerate hip thrust illustration with barbell over hips
