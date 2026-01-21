@@ -134,3 +134,14 @@
 
 ## Phase 20: Badge System Updates
 - [x] Remove consistency streak achievement badges
+
+## Phase 21: Social Media Sharing
+- [x] Create social media sharing utility functions
+- [x] Add share buttons to PR notification screen
+- [x] Add share buttons to achievements screen
+- [x] Add share buttons to session detail screen
+- [x] Create pre-formatted messages for PRs
+- [x] Create pre-formatted messages for badges
+- [x] Implement sharing to Twitter/X
+- [x] Implement sharing to Facebook
+- [x] Implement sharing to Instagram (copy to clipboard)

@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Pressable, PressableStateCallbackType, ActivityIndicator } from "react-native";
+
 import { ScreenContainer } from "@/components/screen-container";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
@@ -9,7 +9,7 @@ import { checkAndUnlockBadges } from "@/lib/badge-tracker";
 import { BADGES } from "@/lib/badges";
 import { checkForNewPRs, PRNotification } from "@/lib/pr-tracker";
 import * as Haptics from "expo-haptics";
-import { Platform } from "react-native";
+import { Platform, ScrollView, Text, View, ActivityIndicator, Pressable, PressableStateCallbackType } from "react-native";
 
 interface ExerciseWithWeight {
   name: string;
@@ -74,6 +74,29 @@ export default function WorkoutSummaryScreen() {
     }
   };
 
+  const handleSharePR = async (pr: PRNotification) => {
+    try {
+      const { generatePRShareMessage, generateBoxJumpShareMessage, shareNatively } = await import('@/lib/social-share');
+      let message = '';
+      if (pr.unit === 'in') {
+        message = generateBoxJumpShareMessage(pr.newValue, pr.improvementPercentage);
+      } else {
+        const unit = pr.unit as 'kg' | 'lb';
+        message = generatePRShareMessage(pr.exerciseName, pr.newValue, unit, pr.improvementPercentage);
+      }
+      
+      await shareNatively({
+        title: 'Share Personal Record',
+        message: message,
+      });
+    } catch (error) {
+      console.error('Error sharing PR:', error);
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  };
+
   const navigateToNextSession = async () => {
     try {
       const nextSessionNumber = session!.sessionNumber + 1;
@@ -130,7 +153,7 @@ export default function WorkoutSummaryScreen() {
     }
   };
 
-  const handleNextPR = () => {
+  const handleNextPR = async () => {
     if (currentPRIndex < newPRs.length - 1) {
       setCurrentPRIndex(currentPRIndex + 1);
     } else {
@@ -223,6 +246,16 @@ export default function WorkoutSummaryScreen() {
             </View>
 
             <View className="flex-row gap-2 w-full">
+              <Pressable
+                onPress={() => handleSharePR(newPRs[currentPRIndex])}
+                style={({ pressed }: PressableStateCallbackType) => ({
+                  transform: [{ scale: pressed ? 0.97 : 1 }],
+                  opacity: pressed ? 0.9 : 1,
+                })}
+                className="bg-primary px-6 py-3 rounded-full"
+              >
+                <Text className="text-white text-center font-bold">📤 Share</Text>
+              </Pressable>
               <Pressable
                 onPress={handleNextPR}
                 style={({ pressed }: PressableStateCallbackType) => ({

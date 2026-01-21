@@ -1,10 +1,12 @@
-import { ScrollView, Text, View, ActivityIndicator, FlatList } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator, FlatList, TouchableOpacity, Alert } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { getAllBadges, Badge } from "@/lib/badges";
 import { getUnlockedBadges, UnlockedBadge, getBadgeProgress } from "@/lib/badge-tracker";
 import { getAllSessions } from "@/lib/workout-utils";
+import { generateBadgeShareMessage, shareNatively } from "@/lib/social-share";
+
 
 export default function AchievementsScreen() {
   const [allBadges, setAllBadges] = useState<Badge[]>([]);
@@ -39,6 +41,19 @@ export default function AchievementsScreen() {
     return unlockedBadges.some(b => b.id === badgeId);
   };
 
+  const handleShareBadge = async (badge: Badge) => {
+    try {
+      const message = generateBadgeShareMessage(badge.name, badge.description);
+      await shareNatively({
+        title: 'Share Achievement',
+        message: message,
+      });
+    } catch (error) {
+      console.error('Error sharing badge:', error);
+      Alert.alert('Share Error', 'Failed to share achievement');
+    }
+  };
+
   const getUnlockDate = (badgeId: string): string | undefined => {
     const badge = unlockedBadges.find(b => b.id === badgeId);
     if (badge) {
@@ -55,7 +70,6 @@ export default function AchievementsScreen() {
       sessions: 'Session Milestones',
       strength: 'Strength Achievements',
       plyometric: 'Plyometric Achievements',
-      consistency: 'Consistency Streaks',
     };
 
     return (
@@ -97,6 +111,14 @@ export default function AchievementsScreen() {
                       </Text>
                     )}
                   </View>
+                  {isUnlocked && (
+                    <TouchableOpacity
+                      onPress={() => handleShareBadge(badge)}
+                      className="ml-2 p-2"
+                    >
+                      <Text className="text-xl">📤</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             );
@@ -116,7 +138,7 @@ export default function AchievementsScreen() {
 
   const unlockedCount = unlockedBadges.length;
   const totalCount = allBadges.length;
-  const categories = ['sessions', 'strength', 'plyometric', 'consistency'];
+  const categories = ['sessions', 'strength', 'plyometric'];
 
   return (
     <ScreenContainer className="p-6">

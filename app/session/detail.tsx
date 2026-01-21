@@ -1,9 +1,10 @@
-import { ScrollView, Text, View, ActivityIndicator } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity, Alert } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { getSessionById } from "@/lib/workout-utils";
 import { WorkoutSession } from "@/lib/types";
+import { generateSessionShareMessage, shareNatively } from "@/lib/social-share";
 
 export default function SessionDetailScreen() {
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
@@ -26,6 +27,20 @@ export default function SessionDetailScreen() {
     }
   };
 
+  const handleShareSession = async () => {
+    if (!session) return;
+    try {
+      const message = generateSessionShareMessage(session.sessionNumber, session.sessionNumber);
+      await shareNatively({
+        title: 'Share Workout',
+        message: message,
+      });
+    } catch (error) {
+      console.error('Error sharing session:', error);
+      Alert.alert('Share Error', 'Failed to share session');
+    }
+  };
+
   if (loading || !session) {
     return (
       <ScreenContainer className="items-center justify-center">
@@ -40,9 +55,19 @@ export default function SessionDetailScreen() {
         <View className="flex-1 gap-6">
           {/* Session Header */}
           <View className="bg-surface rounded-2xl p-6 border border-border">
-            <Text className="text-2xl font-bold text-foreground mb-4">
-              Session #{session.sessionNumber}
-            </Text>
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="text-2xl font-bold text-foreground flex-1">
+                Session #{session.sessionNumber}
+              </Text>
+              {session.completed && (
+                <TouchableOpacity
+                  onPress={handleShareSession}
+                  className="p-2"
+                >
+                  <Text className="text-xl">📤</Text>
+                </TouchableOpacity>
+              )}
+            </View>
             
             <View className="gap-2">
               <View className="flex-row justify-between">
