@@ -114,3 +114,17 @@
 
 ## Phase 17: Bug Fix - Missing Start Session Button
 - [x] Fix missing "Start Session" button on home page
+
+## Phase 18: Exercise Animations
+- [x] Generate animated illustrations for jogging exercise
+- [x] Generate animated illustrations for hamstring stretches
+- [x] Generate animated illustrations for calf stretches
+- [x] Generate animated illustrations for quad stretches
+- [x] Generate animated illustrations for seated leg curls
+- [x] Generate animated illustrations for seated leg raises
+- [x] Generate animated illustrations for weighted calf raises
+- [x] Generate animated illustrations for weighted hip thrusts
+- [x] Generate animated illustrations for volleyball spike box jump
+- [x] Create animation component to display exercises
+- [x] Integrate animations into active workout screen
+- [x] Test animations on different screen sizes

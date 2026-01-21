@@ -6,6 +6,7 @@ import { getSessionById, saveSession, kgToLb, lbToKg } from "@/lib/workout-utils
 import { WorkoutSession, ExerciseLog } from "@/lib/types";
 import { getExerciseById as getDefaultExerciseById } from "@/lib/exercises";
 import { getExerciseById } from "@/lib/combined-exercises";
+import { ExerciseAnimation } from "@/components/exercise-animation";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
@@ -248,6 +249,9 @@ export default function ActiveWorkoutScreen() {
                 </Text>
               )}
             </View>
+
+            {/* Exercise Animation */}
+            <ExerciseAnimation exerciseType={exerciseData.name} isAnimating={true} />
 
             <Text className="text-base text-muted leading-relaxed text-center mb-6">
               {exerciseData.instructions}
