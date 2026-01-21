@@ -154,3 +154,12 @@
 - [x] Remove "repeat 3 times" from hamstring stretches
 - [x] Remove "repeat 3 times" from calf stretches
 - [x] Remove "repeat 3 times" from quad stretches
+
+## Phase 24: Scrollable Progress Bar and Edit Functionality
+- [x] Make progress bar/scroll indicator interactive and draggable
+- [x] Allow users to navigate to previous exercises by dragging scroll bar
+- [x] Display selected exercise when user drags scroll bar
+- [x] Add edit button to weight/height input fields
+- [x] Allow users to modify previously entered values
+- [x] Save edited values to current session
+- [x] Update progress bar position when editing previous exercises

@@ -1,14 +1,14 @@
 import { ScrollView, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Alert, Pressable, PressableStateCallbackType } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getSessionById, saveSession, kgToLb, lbToKg } from "@/lib/workout-utils";
 import { WorkoutSession, ExerciseLog } from "@/lib/types";
 import { getExerciseById as getDefaultExerciseById } from "@/lib/exercises";
 import { getExerciseById } from "@/lib/combined-exercises";
 import { ExerciseAnimation } from "@/components/exercise-animation";
 import * as Haptics from "expo-haptics";
-import { Platform } from "react-native";
+import { Platform, PanResponder, GestureResponderEvent, PanResponderGestureState } from "react-native";
 
 export default function ActiveWorkoutScreen() {
   const router = useRouter();
@@ -87,6 +87,17 @@ export default function ActiveWorkoutScreen() {
     setBoxJumpInches(exerciseLog.boxJumpInches?.toString() || "");
     setTimer(0);
     setTimerRunning(false);
+  };
+
+  const handleProgressBarPress = (e: GestureResponderEvent) => {
+    if (!session) return;
+    const locationX = e.nativeEvent.locationX;
+    const progressBarWidth = 300;
+    const percentage = locationX / progressBarWidth;
+    const newIndex = Math.floor(percentage * session.exercises.length);
+    const clampedIndex = Math.max(0, Math.min(newIndex, session.exercises.length - 1));
+    setCurrentExerciseIndex(clampedIndex);
+    loadExerciseData(session.exercises[clampedIndex]);
   };
 
   const handleWeightKgChange = (value: string) => {
@@ -229,12 +240,16 @@ export default function ActiveWorkoutScreen() {
                 Session #{session.sessionNumber}
               </Text>
             </View>
-            <View className="h-2 bg-surface rounded-full overflow-hidden">
+            <Pressable
+              onPress={(e) => handleProgressBarPress(e)}
+              className="h-3 bg-surface rounded-full overflow-hidden"
+            >
               <View
                 className="h-full bg-primary rounded-full"
                 style={{ width: `${progress}%` }}
               />
-            </View>
+            </Pressable>
+            <Text className="text-xs text-muted text-center mt-1">Tap to navigate exercises</Text>
           </View>
 
           {/* Exercise Card */}
@@ -285,9 +300,12 @@ export default function ActiveWorkoutScreen() {
             {exerciseData.requiresWeight && (
               <View className="gap-4">
                 <View className="gap-2">
-                  <Text className="text-sm text-muted">Weight (kg)</Text>
+                  <View className="flex-row justify-between items-center">
+                    <Text className="text-sm text-muted">Weight (kg)</Text>
+                    <Text className="text-xs text-primary">Editable</Text>
+                  </View>
                   <TextInput
-                    className="bg-background border border-border rounded-xl px-4 py-3 text-foreground text-lg"
+                    className="bg-background border border-primary rounded-xl px-4 py-3 text-foreground text-lg"
                     value={weightKg}
                     onChangeText={handleWeightKgChange}
                     keyboardType="decimal-pad"
@@ -297,9 +315,12 @@ export default function ActiveWorkoutScreen() {
                 </View>
 
                 <View className="gap-2">
-                  <Text className="text-sm text-muted">Weight (lb)</Text>
+                  <View className="flex-row justify-between items-center">
+                    <Text className="text-sm text-muted">Weight (lb)</Text>
+                    <Text className="text-xs text-primary">Editable</Text>
+                  </View>
                   <TextInput
-                    className="bg-background border border-border rounded-xl px-4 py-3 text-foreground text-lg"
+                    className="bg-background border border-primary rounded-xl px-4 py-3 text-foreground text-lg"
                     value={weightLb}
                     onChangeText={handleWeightLbChange}
                     keyboardType="decimal-pad"
@@ -313,9 +334,12 @@ export default function ActiveWorkoutScreen() {
             {/* Box Jump Height Input */}
             {exerciseData.requiresHeight && (
               <View className="gap-2">
-                <Text className="text-sm text-muted">Box Height (inches)</Text>
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-sm text-muted">Box Height (inches)</Text>
+                  <Text className="text-xs text-primary">Editable</Text>
+                </View>
                 <TextInput
-                  className="bg-background border border-border rounded-xl px-4 py-3 text-foreground text-lg"
+                  className="bg-background border border-primary rounded-xl px-4 py-3 text-foreground text-lg"
                   value={boxJumpInches}
                   onChangeText={setBoxJumpInches}
                   keyboardType="decimal-pad"
