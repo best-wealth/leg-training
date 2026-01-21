@@ -120,6 +120,60 @@ export default function ActiveWorkoutScreen() {
     }
   };
 
+  const handleUndo = async () => {
+    if (!session) return;
+
+    const lastCompletedIndex = session.exercises.findIndex((e, idx) => {
+      if (!e.completed) return false;
+      const remainingExercises = session.exercises.slice(idx + 1);
+      return remainingExercises.every(ex => !ex.completed);
+    });
+
+    if (lastCompletedIndex === -1) {
+      Alert.alert("No exercises to undo", "There are no completed exercises to undo.");
+      return;
+    }
+
+    Alert.alert(
+      "Undo Last Exercise?",
+      "Are you sure you want to undo the last completed exercise?",
+      [
+        { text: "Cancel", onPress: () => {}, style: "cancel" },
+        {
+          text: "Undo",
+          onPress: async () => {
+            if (Platform.OS !== "web") {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }
+
+            const updatedExercises = [...session.exercises];
+            updatedExercises[lastCompletedIndex] = {
+              ...updatedExercises[lastCompletedIndex],
+              completed: false,
+              completedAt: undefined,
+              weightKg: undefined,
+              weightLb: undefined,
+              boxJumpInches: undefined,
+            };
+
+            const updatedSession: WorkoutSession = {
+              ...session,
+              exercises: updatedExercises,
+              completed: false,
+              completedAt: undefined,
+            };
+
+            await saveSession(updatedSession);
+            setSession(updatedSession);
+            setCurrentExerciseIndex(lastCompletedIndex);
+            loadExerciseData(updatedExercises[lastCompletedIndex]);
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
   const handleMarkComplete = async () => {
     if (!session) return;
 
@@ -350,8 +404,8 @@ export default function ActiveWorkoutScreen() {
             )}
           </View>
 
-          {/* Mark Complete Button */}
-          <View className="items-center">
+          {/* Mark Complete and Undo Buttons */}
+          <View className="gap-3 items-center">
             <Pressable
               onPress={handleMarkComplete}
               style={({ pressed }: PressableStateCallbackType) => ({
@@ -362,6 +416,18 @@ export default function ActiveWorkoutScreen() {
             >
               <Text className="text-white text-center font-bold text-lg">
                 Mark Complete ✓
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={handleUndo}
+              style={({ pressed }: PressableStateCallbackType) => ({
+                transform: [{ scale: pressed ? 0.97 : 1 }],
+                opacity: pressed ? 0.9 : 1,
+              })}
+              className="bg-error px-8 py-3 rounded-full w-full max-w-xs"
+            >
+              <Text className="text-white text-center font-semibold text-base">
+                ↶ Undo Last
               </Text>
             </Pressable>
           </View>

@@ -163,3 +163,12 @@
 - [x] Allow users to modify previously entered values
 - [x] Save edited values to current session
 - [x] Update progress bar position when editing previous exercises
+
+## Phase 25: Undo Last Exercise Functionality
+- [x] Add undo button to active workout screen
+- [x] Implement logic to revert last completed exercise
+- [x] Mark exercise as incomplete when undone
+- [x] Clear weight/height values from undone exercise
+- [x] Navigate back to undone exercise
+- [x] Show confirmation dialog before undoing
+- [x] Disable undo button when no exercises are completed
