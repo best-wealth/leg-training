@@ -179,3 +179,8 @@
 ## Phase 27: Remove Undo Button
 - [x] Remove Undo Last button from active workout screen
 - [x] Remove handleUndo function from active workout
+
+## Phase 28: Fix App Preview Loading
+- [x] Diagnose app preview loading error
+- [x] Fix dev server or bundling issues
+- [x] Restart dev server if needed
