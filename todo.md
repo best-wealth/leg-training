@@ -175,3 +175,7 @@
 
 ## Phase 26: Hip Thrust Illustration Update
 - [x] Regenerate hip thrust with back resting on bench
+
+## Phase 27: Remove Undo Button
+- [x] Remove Undo Last button from active workout screen
+- [x] Remove handleUndo function from active workout
