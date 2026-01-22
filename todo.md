@@ -172,3 +172,6 @@
 - [x] Navigate back to undone exercise
 - [x] Show confirmation dialog before undoing
 - [x] Disable undo button when no exercises are completed
+
+## Phase 26: Hip Thrust Illustration Update
+- [x] Regenerate hip thrust with back resting on bench
