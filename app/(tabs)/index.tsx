@@ -95,9 +95,9 @@ export default function HomeScreen() {
           {/* Header */}
           <View className="items-center gap-2 pt-4">
             <Text className="text-4xl font-bold text-foreground">🏀</Text>
-            <Text className="text-3xl font-bold text-foreground">Leg Training 4 Ballers</Text>
+            <Text className="text-3xl font-bold text-foreground">Leg Training For Basketball</Text>
             <Text className="text-base text-muted text-center">
-              Basketball Leg & Hip Training
+              Leg & Hip Training For Basketball & Volleyball
             </Text>
           </View>
 

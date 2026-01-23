@@ -192,3 +192,9 @@
 - [x] Fix any TypeScript errors
 - [x] Restart Metro bundler
 - [x] Test on Expo Go
+
+## Phase 30: Update App Icon and Branding
+- [x] Copy custom icon to app assets
+- [x] Update app.config.ts with new icon
+- [x] Change homepage title to "Leg Training For Basketball"
+- [x] Change homepage subtitle to "Leg & Hip Training For Basketball & Volleyball"
