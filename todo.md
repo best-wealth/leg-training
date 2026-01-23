@@ -198,3 +198,12 @@
 - [x] Update app.config.ts with new icon
 - [x] Change homepage title to "Leg Training For Basketball"
 - [x] Change homepage subtitle to "Leg & Hip Training For Basketball & Volleyball"
+
+## Phase 31: Dev Server Restart
+- [x] Restart dev server to restore responsiveness
+
+## Phase 32: Fix Preview Loading
+- [x] Diagnose preview loading failure
+- [x] Check Metro bundler errors
+- [x] Fix bundling or routing issues
+- [x] Verify app loads correctly
