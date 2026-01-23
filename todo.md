@@ -213,3 +213,18 @@
 - [x] Check for runtime errors in app
 - [x] Verify all imports and dependencies
 - [x] Fix any issues preventing preview from loading
+
+## Phase 34: Fix Mobile Preview Loading
+- [x] Check Metro bundler connection from mobile device
+- [x] Verify network connectivity between device and dev server
+- [x] Check for app initialization errors
+- [x] Fix any runtime errors preventing app from loading on mobile
+- [x] Verify Metro bundler is running on port 8081
+
+## Phase 35: Fix Build For Publish Error (EAS Build Timeout)
+- [x] Diagnose build for publish error
+- [x] Optimize build configuration for faster builds
+- [x] Review and optimize dependencies
+- [x] Check for large/unnecessary packages
+- [x] Reduce build time by removing unused code
+- [x] Test optimized build process
