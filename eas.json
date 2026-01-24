@@ -5,29 +5,35 @@
   "build": {
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "resourceClass": "medium"
       },
       "ios": {
-        "simulator": true
+        "simulator": true,
+        "resourceClass": "medium"
       }
     },
     "preview2": {
       "android": {
-        "gradleCommand": ":app:assembleRelease"
+        "gradleCommand": ":app:assembleRelease",
+        "resourceClass": "medium"
       }
     },
     "preview3": {
-      "developmentClient": true
+      "developmentClient": true,
+      "resourceClass": "medium"
     },
     "production": {
       "android": {
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease",
         "withoutCredentials": false,
-        "resourceClass": "large"
+        "resourceClass": "large",
+        "buildCache": true
       },
       "ios": {
-        "resourceClass": "large"
+        "resourceClass": "large",
+        "buildCache": true
       }
     }
   },
