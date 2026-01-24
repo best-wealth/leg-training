@@ -228,3 +228,8 @@
 - [x] Check for large/unnecessary packages
 - [x] Reduce build time by removing unused code
 - [x] Test optimized build process
+
+## Phase 36: User-Requested UI Changes
+- [x] Allow 0 values in weight/height input boxes
+- [x] Simplify workout summary to show only Home button
+- [x] Remove "7 reps" subtitle from all workout titles

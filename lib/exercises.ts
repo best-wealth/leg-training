@@ -44,7 +44,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of seated leg curls. Focus on controlled movement and full range of motion.',
+    instructions: 'Focus on controlled movement and full range of motion.'
   },
   {
     id: 'seated-leg-raises-1',
@@ -52,7 +52,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of seated leg raises. Keep your core engaged throughout the movement.',
+    instructions: 'Keep your core engaged throughout the movement.'
   },
   {
     id: 'weighted-calf-raises-1',
@@ -60,7 +60,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of weighted calf raises. Rise up on your toes and lower slowly.',
+    instructions: 'Rise up on your toes and lower slowly.'
   },
   {
     id: 'weighted-hip-thrusts-1',
@@ -68,7 +68,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of weighted hip thrusts. Drive through your heels and squeeze glutes at the top.',
+    instructions: 'Drive through your heels and squeeze glutes at the top.'
   },
   
   // Stretch Round 1
@@ -101,7 +101,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of seated leg curls. Focus on controlled movement and full range of motion.',
+    instructions: 'Focus on controlled movement and full range of motion.'
   },
   {
     id: 'seated-leg-raises-2',
@@ -109,7 +109,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of seated leg raises. Keep your core engaged throughout the movement.',
+    instructions: 'Keep your core engaged throughout the movement.'
   },
   {
     id: 'weighted-calf-raises-2',
@@ -117,7 +117,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of weighted calf raises. Rise up on your toes and lower slowly.',
+    instructions: 'Rise up on your toes and lower slowly.'
   },
   {
     id: 'weighted-hip-thrusts-2',
@@ -125,7 +125,7 @@ export const EXERCISES: Exercise[] = [
     type: 'strength',
     reps: 7,
     requiresWeight: true,
-    instructions: 'Perform 7 reps of weighted hip thrusts. Drive through your heels and squeeze glutes at the top.',
+    instructions: 'Drive through your heels and squeeze glutes at the top.'
   },
   
   // Stretch Round 2
@@ -158,7 +158,7 @@ export const EXERCISES: Exercise[] = [
     type: 'finisher',
     reps: 7,
     requiresHeight: true,
-    instructions: 'Perform 7 explosive jumps onto the box. Land softly and step down between reps. Record your box height in inches.',
+    instructions: 'Land softly and step down between reps. Record your box height in inches.'
   },
 ];
 

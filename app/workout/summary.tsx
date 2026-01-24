@@ -404,20 +404,7 @@ export default function WorkoutSummaryScreen() {
 
           <View className="gap-3 mt-4">
             <Pressable
-              onPress={handleDone}
-              style={({ pressed }: PressableStateCallbackType) => ({
-                transform: [{ scale: pressed ? 0.97 : 1 }],
-                opacity: pressed ? 0.9 : 1,
-              })}
-              className="bg-success px-8 py-4 rounded-full w-full"
-            >
-              <Text className="text-white text-center font-bold text-lg">
-                Done
-              </Text>
-            </Pressable>
-
-            <Pressable
-              onPress={navigateToNextSession}
+              onPress={navigateToHomepage}
               style={({ pressed }: PressableStateCallbackType) => ({
                 transform: [{ scale: pressed ? 0.97 : 1 }],
                 opacity: pressed ? 0.9 : 1,
@@ -425,7 +412,7 @@ export default function WorkoutSummaryScreen() {
               className="bg-primary px-8 py-4 rounded-full w-full"
             >
               <Text className="text-white text-center font-bold text-lg">
-                Next Session →
+                Home
               </Text>
             </Pressable>
           </View>

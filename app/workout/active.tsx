@@ -103,7 +103,7 @@ export default function ActiveWorkoutScreen() {
   const handleWeightKgChange = (value: string) => {
     setWeightKg(value);
     const numValue = parseFloat(value);
-    if (!isNaN(numValue) && numValue > 0) {
+    if (!isNaN(numValue) && numValue >= 0) {
       setWeightLb(kgToLb(numValue).toString());
     } else {
       setWeightLb("");
@@ -113,7 +113,7 @@ export default function ActiveWorkoutScreen() {
   const handleWeightLbChange = (value: string) => {
     setWeightLb(value);
     const numValue = parseFloat(value);
-    if (!isNaN(numValue) && numValue > 0) {
+    if (!isNaN(numValue) && numValue >= 0) {
       setWeightKg(lbToKg(numValue).toString());
     } else {
       setWeightKg("");
@@ -133,7 +133,7 @@ export default function ActiveWorkoutScreen() {
     // Validate inputs
     if (exerciseDataLoaded?.requiresWeight) {
       const kg = parseFloat(weightKg);
-      if (isNaN(kg) || kg <= 0) {
+      if (isNaN(kg) || kg < 0) {
         Alert.alert("Invalid Weight", "Please enter a valid weight.");
         return;
       }
@@ -141,7 +141,7 @@ export default function ActiveWorkoutScreen() {
 
     if (exerciseDataLoaded?.requiresHeight) {
       const inches = parseFloat(boxJumpInches);
-      if (isNaN(inches) || inches <= 0) {
+      if (isNaN(inches) || inches < 0) {
         Alert.alert("Invalid Height", "Please enter a valid box height in inches.");
         return;
       }
