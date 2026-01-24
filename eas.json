@@ -6,22 +6,26 @@
     "preview": {
       "android": {
         "buildType": "apk",
-        "resourceClass": "medium"
+        "resourceClass": "medium",
+        "buildCache": true
       },
       "ios": {
         "simulator": true,
-        "resourceClass": "medium"
+        "resourceClass": "medium",
+        "buildCache": true
       }
     },
     "preview2": {
       "android": {
         "gradleCommand": ":app:assembleRelease",
-        "resourceClass": "medium"
+        "resourceClass": "medium",
+        "buildCache": true
       }
     },
     "preview3": {
       "developmentClient": true,
-      "resourceClass": "medium"
+      "resourceClass": "medium",
+      "buildCache": true
     },
     "production": {
       "android": {
@@ -29,11 +33,17 @@
         "gradleCommand": ":app:assembleRelease",
         "withoutCredentials": false,
         "resourceClass": "large",
-        "buildCache": true
+        "buildCache": true,
+        "env": {
+          "GRADLE_OPTS": "-Xmx2048m"
+        }
       },
       "ios": {
         "resourceClass": "large",
-        "buildCache": true
+        "buildCache": true,
+        "env": {
+          "XCODE_XCCONFIG_FILE": "/tmp/xcode.xcconfig"
+        }
       }
     }
   },
