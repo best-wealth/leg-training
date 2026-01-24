@@ -233,3 +233,7 @@
 - [x] Allow 0 values in weight/height input boxes
 - [x] Simplify workout summary to show only Home button
 - [x] Remove "7 reps" subtitle from all workout titles
+
+## Phase 37: Profile Page Updates
+- [x] Update About section title to "Leg Training For Basketball"
+- [x] Add "and volleyball players" to About section description

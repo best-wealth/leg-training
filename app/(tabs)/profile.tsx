@@ -116,10 +116,10 @@ export default function ProfileScreen() {
 
             <View className="bg-surface rounded-xl p-4 border border-border">
               <Text className="text-base font-semibold text-foreground mb-2">
-                Hoop Legs Training
+                Leg Training For Basketball
               </Text>
               <Text className="text-sm text-muted leading-relaxed">
-                A comprehensive resistance training program designed for basketball players, 
+                A comprehensive resistance training program designed for basketball players and volleyball players, 
                 targeting leg and hip strength to improve performance on the court.
               </Text>
               <Text className="text-xs text-muted mt-3">Version 1.0.0</Text>
