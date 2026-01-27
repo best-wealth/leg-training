@@ -42,7 +42,6 @@ export const EXERCISES: Exercise[] = [
     id: 'seated-leg-curls-1',
     name: 'Seated Leg Curls',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Focus on controlled movement and full range of motion.'
   },
@@ -50,7 +49,6 @@ export const EXERCISES: Exercise[] = [
     id: 'seated-leg-raises-1',
     name: 'Seated Leg Raises',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Keep your core engaged throughout the movement.'
   },
@@ -58,7 +56,6 @@ export const EXERCISES: Exercise[] = [
     id: 'weighted-calf-raises-1',
     name: 'Weighted Calf Raises',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Rise up on your toes and lower slowly.'
   },
@@ -66,7 +63,6 @@ export const EXERCISES: Exercise[] = [
     id: 'weighted-hip-thrusts-1',
     name: 'Weighted Hip Thrusts',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Drive through your heels and squeeze glutes at the top.'
   },
@@ -99,7 +95,6 @@ export const EXERCISES: Exercise[] = [
     id: 'seated-leg-curls-2',
     name: 'Seated Leg Curls',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Focus on controlled movement and full range of motion.'
   },
@@ -107,7 +102,6 @@ export const EXERCISES: Exercise[] = [
     id: 'seated-leg-raises-2',
     name: 'Seated Leg Raises',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Keep your core engaged throughout the movement.'
   },
@@ -115,7 +109,6 @@ export const EXERCISES: Exercise[] = [
     id: 'weighted-calf-raises-2',
     name: 'Weighted Calf Raises',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Rise up on your toes and lower slowly.'
   },
@@ -123,7 +116,6 @@ export const EXERCISES: Exercise[] = [
     id: 'weighted-hip-thrusts-2',
     name: 'Weighted Hip Thrusts',
     type: 'strength',
-    reps: 7,
     requiresWeight: true,
     instructions: 'Drive through your heels and squeeze glutes at the top.'
   },
@@ -156,7 +148,6 @@ export const EXERCISES: Exercise[] = [
     id: 'box-jump',
     name: 'Volleyball Spike Jump onto Box',
     type: 'finisher',
-    reps: 7,
     requiresHeight: true,
     instructions: 'Land softly and step down between reps. Record your box height in inches.'
   },

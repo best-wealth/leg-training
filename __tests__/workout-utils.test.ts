@@ -73,12 +73,11 @@ describe('Exercise Data', () => {
     expect(finisherCount).toBe(1); // Box jump
   });
 
-  it('should have strength exercises requiring weight', () => {
-    const strengthExercises = EXERCISES.filter(e => e.requiresWeight);
+  it('should have strength exercises', () => {
+    const strengthExercises = EXERCISES.filter(e => e.type === 'strength');
     expect(strengthExercises.length).toBeGreaterThan(0);
-    
     strengthExercises.forEach(exercise => {
-      expect(exercise.reps).toBe(7);
+      expect(exercise.requiresWeight).toBe(true);
     });
   });
 
@@ -86,6 +85,6 @@ describe('Exercise Data', () => {
     const boxJump = EXERCISES.find(e => e.requiresHeight);
     expect(boxJump).toBeDefined();
     expect(boxJump?.name).toBe('Volleyball Spike Jump onto Box');
-    expect(boxJump?.reps).toBe(7);
+    expect(boxJump?.type).toBe('finisher');
   });
 });

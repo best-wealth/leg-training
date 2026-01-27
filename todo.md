@@ -262,3 +262,7 @@
 - [x] Enable New Architecture for better build compatibility
 - [x] Verify app builds locally
 - [x] All tests passing
+
+## Phase 42: Fix Remaining Issues
+- [x] Remove all remaining "7 reps" subtitles from exercises
+- [x] Fix input validation to properly accept 0 values

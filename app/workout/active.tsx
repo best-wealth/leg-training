@@ -131,7 +131,7 @@ export default function ActiveWorkoutScreen() {
     const exerciseDataLoaded = await getExerciseById(currentExercise.exerciseId);
 
     // Validate inputs
-    if (exerciseDataLoaded?.requiresWeight) {
+    if (exerciseDataLoaded?.requiresWeight && weightKg) {
       const kg = parseFloat(weightKg);
       if (isNaN(kg) || kg < 0) {
         Alert.alert("Invalid Weight", "Please enter a valid weight.");
@@ -139,7 +139,7 @@ export default function ActiveWorkoutScreen() {
       }
     }
 
-    if (exerciseDataLoaded?.requiresHeight) {
+    if (exerciseDataLoaded?.requiresHeight && boxJumpInches) {
       const inches = parseFloat(boxJumpInches);
       if (isNaN(inches) || inches < 0) {
         Alert.alert("Invalid Height", "Please enter a valid box height in inches.");
