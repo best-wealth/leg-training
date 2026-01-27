@@ -3,47 +3,13 @@
     "version": ">= 5.0.0"
   },
   "build": {
-    "preview": {
-      "android": {
-        "buildType": "apk",
-        "resourceClass": "medium",
-        "buildCache": true
-      },
-      "ios": {
-        "simulator": true,
-        "resourceClass": "medium",
-        "buildCache": true
-      }
-    },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease",
-        "resourceClass": "medium",
-        "buildCache": true
-      }
-    },
-    "preview3": {
-      "developmentClient": true,
-      "resourceClass": "medium",
-      "buildCache": true
-    },
     "production": {
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease",
-        "withoutCredentials": false,
-        "resourceClass": "large",
-        "buildCache": true,
-        "env": {
-          "GRADLE_OPTS": "-Xmx2048m"
-        }
+        "resourceClass": "large"
       },
       "ios": {
-        "resourceClass": "large",
-        "buildCache": true,
-        "env": {
-          "XCODE_XCCONFIG_FILE": "/tmp/xcode.xcconfig"
-        }
+        "resourceClass": "large"
       }
     }
   },

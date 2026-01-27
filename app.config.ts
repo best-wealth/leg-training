@@ -48,39 +48,17 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   newArchEnabled: false,
   ios: {
-    supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
-    "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
   },
   android: {
     adaptiveIcon: {
       backgroundColor: "#E6F4FE",
       foregroundImage: "./assets/images/android-icon-foreground.png",
-      backgroundImage: "./assets/images/android-icon-background.png",
-      monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
-    edgeToEdgeEnabled: true,
-    predictiveBackGestureEnabled: false,
     package: env.androidPackage,
     permissions: ["POST_NOTIFICATIONS"],
-    intentFilters: [
-      {
-        action: "VIEW",
-        autoVerify: true,
-        data: [
-          {
-            scheme: env.scheme,
-            host: "*",
-          },
-        ],
-        category: ["BROWSABLE", "DEFAULT"],
-      },
-    ],
   },
   web: {
-    bundler: "metro",
     output: "static",
     favicon: "./assets/images/favicon.png",
   },
@@ -102,18 +80,13 @@ const config: ExpoConfig = {
       "expo-build-properties",
       {
         android: {
-          buildArchs: ["armeabi-v7a", "arm64-v8a"],
           minSdkVersion: 24,
-        },
-        ios: {
-          useFrameworks: "static",
         },
       },
     ],
   ],
   experiments: {
     typedRoutes: true,
-    reactCompiler: false,
   },
 };
 
