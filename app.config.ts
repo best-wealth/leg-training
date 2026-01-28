@@ -46,21 +46,16 @@ const config: ExpoConfig = {
   icon: "./assets/images/icon.png",
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
-  newArchEnabled: true,
+  newArchEnabled: false,
   ios: {
     bundleIdentifier: env.iosBundleId,
   },
   android: {
-    adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
-      foregroundImage: "./assets/images/android-icon-foreground.png",
-    },
     package: env.androidPackage,
     permissions: ["POST_NOTIFICATIONS"],
   },
   web: {
     output: "static",
-    favicon: "./assets/images/favicon.png",
   },
   plugins: [
     "expo-router",
@@ -73,9 +68,7 @@ const config: ExpoConfig = {
       },
     ],
   ],
-  experiments: {
-    typedRoutes: true,
-  },
+  experiments: {},
 };
 
 export default config;
