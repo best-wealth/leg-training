@@ -271,3 +271,6 @@
 - [x] Diagnose publish page stuck issue
 - [x] Fix APK build process
 - [x] Enable build for publish
+
+## Phase 44: Update Box Jump Achievements
+- [x] Change box jump achievements to 30", 40", 50"

@@ -177,17 +177,17 @@ export async function checkAndUnlockBadges(
 
     // Box jump badges
     if (exercise.boxJumpInches) {
-      if (exercise.boxJumpInches >= 30 && !(await isBadgeUnlocked('box_jump_30in'))) {
+      if (exercise.boxJumpInches >= 50 && !(await isBadgeUnlocked('box_jump_50in'))) {
+        if (await unlockBadge('box_jump_50in')) {
+          newlyUnlocked.push('box_jump_50in');
+        }
+      } else if (exercise.boxJumpInches >= 40 && !(await isBadgeUnlocked('box_jump_40in'))) {
+        if (await unlockBadge('box_jump_40in')) {
+          newlyUnlocked.push('box_jump_40in');
+        }
+      } else if (exercise.boxJumpInches >= 30 && !(await isBadgeUnlocked('box_jump_30in'))) {
         if (await unlockBadge('box_jump_30in')) {
           newlyUnlocked.push('box_jump_30in');
-        }
-      } else if (exercise.boxJumpInches >= 24 && !(await isBadgeUnlocked('box_jump_24in'))) {
-        if (await unlockBadge('box_jump_24in')) {
-          newlyUnlocked.push('box_jump_24in');
-        }
-      } else if (exercise.boxJumpInches >= 20 && !(await isBadgeUnlocked('box_jump_20in'))) {
-        if (await unlockBadge('box_jump_20in')) {
-          newlyUnlocked.push('box_jump_20in');
         }
       }
     }

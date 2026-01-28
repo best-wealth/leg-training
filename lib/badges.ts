@@ -21,9 +21,9 @@ export type BadgeId =
   | 'hip_thrust_100kg'
   | 'hip_thrust_150kg'
   | 'hip_thrust_200kg'
-  | 'box_jump_20in'
-  | 'box_jump_24in'
-  | 'box_jump_30in';
+  | 'box_jump_30in'
+  | 'box_jump_40in'
+  | 'box_jump_50in';
 
 export interface Badge {
   id: BadgeId;
@@ -179,24 +179,24 @@ export const BADGES: Record<BadgeId, Omit<Badge, 'unlockedAt'>> = {
   },
 
   // Box jump plyometric milestones
-  box_jump_20in: {
-    id: 'box_jump_20in',
-    name: 'Box Jump Starter',
-    description: 'Jump 20 inches onto the box',
-    icon: '📦',
-    category: 'plyometric',
-  },
-  box_jump_24in: {
-    id: 'box_jump_24in',
-    name: 'Box Jump Intermediate',
-    description: 'Jump 24 inches onto the box',
-    icon: '📦',
-    category: 'plyometric',
-  },
   box_jump_30in: {
     id: 'box_jump_30in',
-    name: 'Box Jump Master',
+    name: 'Box Jump Starter',
     description: 'Jump 30 inches onto the box',
+    icon: '📦',
+    category: 'plyometric',
+  },
+  box_jump_40in: {
+    id: 'box_jump_40in',
+    name: 'Box Jump Intermediate',
+    description: 'Jump 40 inches onto the box',
+    icon: '📦',
+    category: 'plyometric',
+  },
+  box_jump_50in: {
+    id: 'box_jump_50in',
+    name: 'Box Jump Master',
+    description: 'Jump 50 inches onto the box',
     icon: '📦',
     category: 'plyometric',
   },
