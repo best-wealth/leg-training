@@ -1,7 +1,9 @@
 {
-  "name": "app-template",
-  "version": "1.0.0",
+  "name": "leg-training-for-basketball",
+  "version": "1.0.2",
   "private": true,
+  "author": "best_wealth",
+  "description": "Leg & Hip Training For Basketball & Volleyball",
   "main": "expo-router/entry",
   "scripts": {
     "dev": "concurrently -k \"pnpm dev:server\" \"pnpm dev:metro\"",
@@ -88,5 +90,10 @@
     "typescript": "~5.9.3",
     "vitest": "^2.1.9"
   },
-  "packageManager": "pnpm@9.12.0"
+  "packageManager": "pnpm@9.12.0",
+  "app": {
+    "id": "ebac54c6-6f90-4576-998a-36de25e922a8",
+    "slug": "leg-training-for-basketball",
+    "owner": "best_wealth"
+  }
 }

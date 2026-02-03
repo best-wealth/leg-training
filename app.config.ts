@@ -29,7 +29,9 @@ const schemeFromBundleId = `manus${timestamp}`;
 const env = {
   // App branding - update these values directly (do not use env vars)
   appName: "Leg Training For Basketball",
-  appSlug: "basketball-training-app",
+  appSlug: "leg-training-for-basketball",
+  appId: "ebac54c6-6f90-4576-998a-36de25e922a8",
+  owner: "best_wealth",
   // S3 URL of the app logo - set this to the URL returned by generate_image when creating custom logo
   // Leave empty to use the default icon from assets/images/icon.png
   logoUrl: "https://manus-gen-images.s3.amazonaws.com/b3e4e5f0-8c2a-4d7e-9f1b-2a3c4d5e6f7a.png",
