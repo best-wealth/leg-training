@@ -4,13 +4,8 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
+      "developmentClient": false,
       "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
-    },
-    "preview": {
       "android": {
         "buildType": "apk",
         "resourceClass": "large"
@@ -19,11 +14,21 @@
         "resourceClass": "large"
       }
     },
-    "production": {
+    "preview": {
       "android": {
         "buildType": "apk",
         "resourceClass": "large",
         "gradleCommand": ":app:assembleRelease"
+      },
+      "ios": {
+        "resourceClass": "large"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "app-bundle",
+        "resourceClass": "large",
+        "gradleCommand": ":app:bundleRelease"
       },
       "ios": {
         "resourceClass": "large",

@@ -41,12 +41,12 @@ const env = {
 const config: ExpoConfig = {
   name: env.appName,
   slug: env.appSlug,
-  version: "1.0.0",
+  version: "1.0.2",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
-  newArchEnabled: false,
+  newArchEnabled: true,
   ios: {
     bundleIdentifier: env.iosBundleId,
   },
@@ -56,6 +56,7 @@ const config: ExpoConfig = {
   },
   web: {
     output: "static",
+    bundler: "metro",
   },
   plugins: [
     "expo-router",
@@ -64,11 +65,15 @@ const config: ExpoConfig = {
       {
         android: {
           minSdkVersion: 24,
+          targetSdkVersion: 34,
+          compileSdkVersion: 34,
         },
       },
     ],
   ],
-  experiments: {},
+  experiments: {
+    typedRoutes: true,
+  },
 };
 
 export default config;
