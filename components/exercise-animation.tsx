@@ -14,7 +14,7 @@ const exerciseImages: Record<string, any> = {
   'Seated Leg Curls': require('@/assets/images/exercise-leg-curl.png'),
   'Seated Leg Raises': require('@/assets/images/exercise-leg-raise.png'),
   'Weighted Calf Raises': require('@/assets/images/exercise-calf-raise.png'),
-  'Weighted Hip Thrusts': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/EWeHzSSAFgfXjjqF.png' },
+  'Weighted Hip Thrusts': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/XaPEybhJQvGlVaAi.png' },
   'Volleyball Spike Box Jump': require('@/assets/images/exercise-box-jump.png'),
 };
 
