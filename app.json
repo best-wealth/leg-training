@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "Leg Training For Basketball",
+    "slug": "leg-training-for-basketball",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "owner": "best_wealth",
+    "runtimeVersion": "1.0.2",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "space.manus.basketball.training.app.t20260120071010"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundColor": "#E6F4FE"
+      },
+      "package": "space.manus.basketball.training.app.t20260120071010",
+      "permissions": [
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png",
+      "output": "static",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24,
+            "targetSdkVersion": 34,
+            "compileSdkVersion": 34
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "scheme": "manus20260120071010",
+    "extra": {
+      "eas": {
+        "projectId": "ebac54c6-6f90-4576-998a-36de25e922a8"
+      }
+    }
+  }
+}

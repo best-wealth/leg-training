@@ -285,3 +285,8 @@
 - [x] Update app.config.ts with new slug and ID
 - [x] Update package.json with owner information
 - [x] Update other configuration files
+
+## Phase 47: Create app.json for EAS Submit
+- [x] Create app.json with slug, name, id, and owner
+- [x] Build .aab file for Google Play Store
+- [x] Create EAS submit guide and instructions
