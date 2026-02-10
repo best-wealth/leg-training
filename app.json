@@ -32,7 +32,12 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": false
+        }
+      ],
       [
         "expo-build-properties",
         {
@@ -45,7 +50,8 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "reactCompiler": false
     },
     "scheme": "manus20260120071010",
     "extra": {
