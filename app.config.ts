@@ -49,6 +49,11 @@ const config: ExpoConfig = {
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
   newArchEnabled: false,
+  extra: {
+    eas: {
+      projectId: "9b8e0df2-7c76-4bde-b79f-006055c93c13",
+    },
+  },
   ios: {
     bundleIdentifier: env.iosBundleId,
   },
@@ -60,6 +65,7 @@ const config: ExpoConfig = {
     output: "static",
     bundler: "metro",
   },
+  owner: "bestwealth",
   plugins: [
     "expo-router",
     [

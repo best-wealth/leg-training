@@ -25,7 +25,7 @@
     "@react-navigation/native": "^7.1.28",
     "@tanstack/react-query": "^5.90.21",
     "clsx": "^2.1.1",
-    "expo": "~54.0.33",
+    "expo": "~54.0.0",
     "expo-build-properties": "^1.0.10",
     "expo-constants": "~18.0.13",
     "expo-font": "~14.0.11",
@@ -44,7 +44,7 @@
     "nativewind": "^4.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-native": "0.84.0",
+    "react-native": "0.76.0",
     "react-native-chart-kit": "^6.12.0",
     "react-native-gesture-handler": "~2.30.0",
     "react-native-reanimated": "~4.2.1",
@@ -74,11 +74,11 @@
     "vitest": "^4.0.18"
   },
   "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=10.0.0",
-    "pnpm": ">=9.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0",
+    "pnpm": ">=8.0.0"
   },
-  "packageManager": "pnpm@9.12.0",
+
   "app": {
     "id": "ebac54c6-6f90-4576-998a-36de25e922a8",
     "slug": "leg-training-for-basketball",
