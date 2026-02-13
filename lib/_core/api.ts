@@ -48,7 +48,13 @@ export async function apiCall<T>(endpoint: string, options: RequestInit = {}): P
     });
 
     console.log("[API] Response status:", response.status, response.statusText);
-    const responseHeaders = Object.fromEntries(response.headers.entries());
+    // Convert headers to object (handle both Node.js and browser APIs)
+    const responseHeaders: Record<string, string> = {};
+    if (typeof (response.headers as any).entries === 'function') {
+      for (const [key, value] of (response.headers as any).entries()) {
+        responseHeaders[key] = value;
+      }
+    }
     console.log("[API] Response headers:", responseHeaders);
 
     // Check if Set-Cookie header is present (cookies are automatically handled in React Native)
