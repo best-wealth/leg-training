@@ -316,3 +316,9 @@
 - [x] Update incompatible dependencies
 - [x] Fix version conflicts
 - [x] Test all functionality
+
+## Phase 52: Fix Leg Curl Exercise Image
+- [x] Regenerate leg curl image with proper machine and thigh pad
+- [x] Optimize all exercise images for Expo and Google Play
+- [x] Update exercise-animation.tsx with optimized images
+- [x] Test on Expo Go and verify Google Play compatibility
