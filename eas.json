@@ -27,9 +27,11 @@
     "production": {
       "android": {
         "buildType": "app-bundle",
+        "resourceClass": "large",
         "gradleCommand": ":app:bundleRelease"
       },
       "ios": {
+        "resourceClass": "large",
         "scheme": "leg-training-for-basketball"
       }
     }
