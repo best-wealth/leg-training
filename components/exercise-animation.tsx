@@ -7,15 +7,15 @@ interface ExerciseAnimationProps {
 }
 
 const exerciseImages: Record<string, any> = {
-  'Jogging': require('@/assets/images/exercise-jogging.png'),
-  'Hamstring Stretches': require('@/assets/images/exercise-hamstring-stretch.png'),
-  'Calf Stretches': require('@/assets/images/exercise-calf-stretch.png'),
-  'Quad Stretches': require('@/assets/images/exercise-quad-stretch.png'),
-  'Seated Leg Curls': require('@/assets/images/exercise-leg-curl.png'),
-  'Seated Leg Raises': require('@/assets/images/exercise-leg-raise.png'),
-  'Weighted Calf Raises': require('@/assets/images/exercise-calf-raise.png'),
-  'Weighted Hip Thrusts': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/XaPEybhJQvGlVaAi.png' },
-  'Volleyball Spike Box Jump': require('@/assets/images/exercise-box-jump.png'),
+  'Jogging': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/3I5y5pBKvdhkubdA7vnSi0-img-1_1770987014000_na1fn_ZXhlcmNpc2Utam9nZ2luZw.png' },
+  'Hamstring Stretches': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/3I5y5pBKvdhkubdA7vnSi0-img-2_1770987008000_na1fn_ZXhlcmNpc2UtaGFtc3RyaW5nLXN0cmV0Y2hlcw.png' },
+  'Calf Stretches': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/3I5y5pBKvdhkubdA7vnSi0-img-3_1770987020000_na1fn_ZXhlcmNpc2UtY2FsZi1zdHJldGNoZXM.png' },
+  'Quad Stretches': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/3I5y5pBKvdhkubdA7vnSi0-img-4_1770987013000_na1fn_ZXhlcmNpc2UtcXVhZC1zdHJldGNoZXM.png' },
+  'Seated Leg Curls': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/3I5y5pBKvdhkubdA7vnSi0-img-5_1770987006000_na1fn_ZXhlcmNpc2Utc2VhdGVkLWxlZy1jdXJscw.png' },
+  'Seated Leg Raises': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/JZvRi6T60ELQtu8y01g1aP-img-1_1770987075000_na1fn_ZXhlcmNpc2UtbGVnLXJhaXNlcw.png' },
+  'Weighted Calf Raises': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/JZvRi6T60ELQtu8y01g1aP-img-2_1770987101000_na1fn_ZXhlcmNpc2UtY2FsZi1yYWlzZXM.png' },
+  'Weighted Hip Thrusts': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/JZvRi6T60ELQtu8y01g1aP-img-3_1770987076000_na1fn_ZXhlcmNpc2Utd2VpZ2h0ZWQtaGlwLXRocnVzdHM.png' },
+  'Volleyball Spike Box Jump': { uri: 'https://private-us-east-1.manuscdn.com/sessionFile/xp2DOOXJACyrfw1UAnkN0S/sandbox/JZvRi6T60ELQtu8y01g1aP-img-4_1770987078000_na1fn_ZXhlcmNpc2UtYm94LWp1bXBz.png' },
 };
 
 export function ExerciseAnimation({ exerciseType, isAnimating }: ExerciseAnimationProps) {
