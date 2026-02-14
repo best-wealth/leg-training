@@ -73,10 +73,10 @@ export async function getUserInfo(): Promise<User | null> {
     console.log("[Auth] Getting user info...");
 
     let info: string | null = null;
-    if (Platform.OS === "web") {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
       // Use localStorage for web
       info = window.localStorage.getItem(USER_INFO_KEY);
-    } else {
+    } else if (Platform.OS !== "web") {
       // Use SecureStore for native
       info = await SecureStore.getItemAsync(USER_INFO_KEY);
     }
@@ -98,10 +98,13 @@ export async function setUserInfo(user: User): Promise<void> {
   try {
     console.log("[Auth] Setting user info...", user);
 
-    if (Platform.OS === "web") {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
       // Use localStorage for web
       window.localStorage.setItem(USER_INFO_KEY, JSON.stringify(user));
       console.log("[Auth] User info stored in localStorage successfully");
+      return;
+    } else if (Platform.OS === "web") {
+      console.log("[Auth] Web platform but window not available, skipping storage");
       return;
     }
 
@@ -115,14 +118,19 @@ export async function setUserInfo(user: User): Promise<void> {
 
 export async function clearUserInfo(): Promise<void> {
   try {
-    if (Platform.OS === "web") {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
       // Use localStorage for web
       window.localStorage.removeItem(USER_INFO_KEY);
+      console.log("[Auth] User info cleared from localStorage successfully");
+      return;
+    } else if (Platform.OS === "web") {
+      console.log("[Auth] Web platform but window not available, skipping removal");
       return;
     }
 
     // Use SecureStore for native
     await SecureStore.deleteItemAsync(USER_INFO_KEY);
+    console.log("[Auth] User info cleared from SecureStore successfully");
   } catch (error) {
     console.error("[Auth] Failed to clear user info:", error);
   }
