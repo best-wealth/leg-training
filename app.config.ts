@@ -34,7 +34,7 @@ const env = {
   owner: "best_wealth",
   // S3 URL of the app logo - set this to the URL returned by generate_image when creating custom logo
   // Leave empty to use the default icon from assets/images/icon.png
-  logoUrl: "https://manus-gen-images.s3.amazonaws.com/b3e4e5f0-8c2a-4d7e-9f1b-2a3c4d5e6f7a.png",
+  logoUrl: "",
   scheme: schemeFromBundleId,
   iosBundleId: bundleId,
   androidPackage: bundleId,
