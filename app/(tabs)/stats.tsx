@@ -32,55 +32,49 @@ export default function StatsScreen() {
   const exercises = getUniqueStrengthExercises();
   const screenWidth = Dimensions.get("window").width;
 
-  // Simple SVG-based bar chart component
-  const SimpleBarChart = ({ data, labels, yAxisLabel, yAxisSuffix }: any) => {
+  // Simple React Native bar chart component (works in Expo Go)
+  const SimpleBarChart = ({ data, labels, yAxisSuffix }: any) => {
     if (!data || data.length === 0) return null;
     const maxValue = Math.max(...data);
     const chartHeight = 200;
-    const barWidth = 30;
-    const spacing = 20;
-    const totalWidth = data.length * (barWidth + spacing) + 40;
 
     return (
-      <View className="overflow-x-auto">
-        <svg width={totalWidth} height={chartHeight + 60} style={{ minWidth: '100%' }}>
-          {/* Y-axis */}
-          <line x1="30" y1="10" x2="30" y2={chartHeight + 10} stroke={colors.border} strokeWidth="1" />
-          {/* X-axis */}
-          <line x1="30" y1={chartHeight + 10} x2={totalWidth} y2={chartHeight + 10} stroke={colors.border} strokeWidth="1" />
-          
-          {/* Y-axis labels */}
-          {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
-            const value = (maxValue * ratio).toFixed(1);
-            const y = chartHeight + 10 - (chartHeight * ratio);
-            return (
-              <g key={`y-${i}`}>
-                <line x1="25" y1={y} x2="30" y2={y} stroke={colors.border} strokeWidth="1" />
-                <text x="20" y={y + 4} fontSize="10" fill={colors.muted} textAnchor="end">
-                  {value}
-                </text>
-              </g>
-            );
-          })}
-          
-          {/* Bars */}
+      <View className="gap-4">
+        {/* Chart area */}
+        <View
+          className="flex-row items-flex-end justify-center gap-2 p-4 bg-surface rounded-lg border border-border"
+          style={{ height: chartHeight + 60 }}
+        >
           {data.map((value: number, i: number) => {
             const barHeight = (value / maxValue) * chartHeight;
-            const x = 30 + i * (barWidth + spacing) + spacing / 2;
-            const y = chartHeight + 10 - barHeight;
             return (
-              <g key={`bar-${i}`}>
-                <rect x={x} y={y} width={barWidth} height={barHeight} fill={colors.primary} rx="4" />
-                <text x={x + barWidth / 2} y={chartHeight + 30} fontSize="12" fill={colors.muted} textAnchor="middle">
-                  {labels[i]}
-                </text>
-                <text x={x + barWidth / 2} y={y - 5} fontSize="11" fill={colors.foreground} textAnchor="middle" fontWeight="bold">
+              <View key={`bar-${i}`} className="items-center gap-1 flex-1">
+                {/* Bar */}
+                <View
+                  className="w-full bg-primary rounded-t"
+                  style={{
+                    height: barHeight,
+                    minHeight: 5,
+                  }}
+                />
+                {/* Value label */}
+                <Text className="text-xs font-bold text-foreground">
                   {value.toFixed(1)}
-                </text>
-              </g>
+                </Text>
+                {/* Session label */}
+                <Text className="text-xs text-muted">
+                  {labels[i]}
+                </Text>
+              </View>
             );
           })}
-        </svg>
+        </View>
+
+        {/* Legend */}
+        <View className="flex-row justify-between px-4">
+          <Text className="text-xs text-muted">Min: {Math.min(...data).toFixed(1)}</Text>
+          <Text className="text-xs text-muted">Max: {Math.max(...data).toFixed(1)}</Text>
+        </View>
       </View>
     );
   };
