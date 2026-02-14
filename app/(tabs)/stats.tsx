@@ -10,7 +10,6 @@ import {
 } from "@/lib/workout-utils";
 import { getUniqueStrengthExercises } from "@/lib/exercises";
 import { PersonalRecord } from "@/lib/types";
-import { BarChart } from "react-native-chart-kit";
 import { useColors } from "@/hooks/use-colors";
 
 export default function StatsScreen() {
@@ -32,6 +31,59 @@ export default function StatsScreen() {
 
   const exercises = getUniqueStrengthExercises();
   const screenWidth = Dimensions.get("window").width;
+
+  // Simple SVG-based bar chart component
+  const SimpleBarChart = ({ data, labels, yAxisLabel, yAxisSuffix }: any) => {
+    if (!data || data.length === 0) return null;
+    const maxValue = Math.max(...data);
+    const chartHeight = 200;
+    const barWidth = 30;
+    const spacing = 20;
+    const totalWidth = data.length * (barWidth + spacing) + 40;
+
+    return (
+      <View className="overflow-x-auto">
+        <svg width={totalWidth} height={chartHeight + 60} style={{ minWidth: '100%' }}>
+          {/* Y-axis */}
+          <line x1="30" y1="10" x2="30" y2={chartHeight + 10} stroke={colors.border} strokeWidth="1" />
+          {/* X-axis */}
+          <line x1="30" y1={chartHeight + 10} x2={totalWidth} y2={chartHeight + 10} stroke={colors.border} strokeWidth="1" />
+          
+          {/* Y-axis labels */}
+          {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
+            const value = (maxValue * ratio).toFixed(1);
+            const y = chartHeight + 10 - (chartHeight * ratio);
+            return (
+              <g key={`y-${i}`}>
+                <line x1="25" y1={y} x2="30" y2={y} stroke={colors.border} strokeWidth="1" />
+                <text x="20" y={y + 4} fontSize="10" fill={colors.muted} textAnchor="end">
+                  {value}
+                </text>
+              </g>
+            );
+          })}
+          
+          {/* Bars */}
+          {data.map((value: number, i: number) => {
+            const barHeight = (value / maxValue) * chartHeight;
+            const x = 30 + i * (barWidth + spacing) + spacing / 2;
+            const y = chartHeight + 10 - barHeight;
+            return (
+              <g key={`bar-${i}`}>
+                <rect x={x} y={y} width={barWidth} height={barHeight} fill={colors.primary} rx="4" />
+                <text x={x + barWidth / 2} y={chartHeight + 30} fontSize="12" fill={colors.muted} textAnchor="middle">
+                  {labels[i]}
+                </text>
+                <text x={x + barWidth / 2} y={y - 5} fontSize="11" fill={colors.foreground} textAnchor="middle" fontWeight="bold">
+                  {value.toFixed(1)}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </View>
+    );
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -166,36 +218,12 @@ export default function StatsScreen() {
                   <Text className="text-lg font-semibold text-foreground mb-4">
                     Weight Progression
                   </Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <BarChart
-                      data={chartData}
-                      width={Math.max(screenWidth - 80, chartData.labels.length * 60)}
-                      height={220}
-                      yAxisLabel=""
-                      yAxisSuffix=" kg"
-                      chartConfig={{
-                        backgroundColor: colors.surface,
-                        backgroundGradientFrom: colors.surface,
-                        backgroundGradientTo: colors.surface,
-                        decimalPlaces: 1,
-                        color: (opacity = 1) => `rgba(255, 107, 53, ${opacity})`,
-                        labelColor: (opacity = 1) => colors.muted,
-                        style: {
-                          borderRadius: 16,
-                        },
-                        propsForBackgroundLines: {
-                          strokeDasharray: '',
-                          stroke: colors.border,
-                          strokeWidth: 1,
-                        },
-                      }}
-                      style={{
-                        borderRadius: 16,
-                      }}
-                      showValuesOnTopOfBars
-                      fromZero
-                    />
-                  </ScrollView>
+                  <SimpleBarChart
+                    data={chartData.datasets[0].data}
+                    labels={chartData.labels}
+                    yAxisLabel=""
+                    yAxisSuffix=" kg"
+                  />
                 </View>
               )}
 
@@ -208,36 +236,12 @@ export default function StatsScreen() {
                   <Text className="text-sm text-muted mb-4">
                     Max Height: {Math.max(...boxJumpData.map(d => d.maxHeightInches))} inches
                   </Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <BarChart
-                      data={boxJumpChartData}
-                      width={Math.max(screenWidth - 80, boxJumpChartData.labels.length * 60)}
-                      height={220}
-                      yAxisLabel=""
-                      yAxisSuffix='"'
-                      chartConfig={{
-                        backgroundColor: colors.surface,
-                        backgroundGradientFrom: colors.surface,
-                        backgroundGradientTo: colors.surface,
-                        decimalPlaces: 0,
-                        color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
-                        labelColor: (opacity = 1) => colors.muted,
-                        style: {
-                          borderRadius: 16,
-                        },
-                        propsForBackgroundLines: {
-                          strokeDasharray: '',
-                          stroke: colors.border,
-                          strokeWidth: 1,
-                        },
-                      }}
-                      style={{
-                        borderRadius: 16,
-                      }}
-                      showValuesOnTopOfBars
-                      fromZero
-                    />
-                  </ScrollView>
+                  <SimpleBarChart
+                    data={boxJumpChartData.datasets[0].data}
+                    labels={boxJumpChartData.labels}
+                    yAxisLabel=""
+                    yAxisSuffix='" '
+                  />
                 </View>
               )}
             </>
