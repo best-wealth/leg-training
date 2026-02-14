@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, Animated } from 'react-native';
+import { View, Image, StyleSheet, Animated, Platform } from 'react-native';
 import { useEffect, useRef } from 'react';
 
 interface ExerciseAnimationProps {
@@ -30,26 +30,26 @@ export function ExerciseAnimation({ exerciseType, isAnimating }: ExerciseAnimati
         Animated.sequence([
           Animated.parallel([
             Animated.timing(scaleAnim, {
-              toValue: 1.05,
-              duration: 600,
-              useNativeDriver: true,
+              toValue: 0.95,
+              duration: 300,
+              useNativeDriver: Platform.OS !== 'web',
             }),
             Animated.timing(opacityAnim, {
-              toValue: 0.8,
-              duration: 600,
-              useNativeDriver: true,
+              toValue: 0.7,
+              duration: 300,
+              useNativeDriver: Platform.OS !== 'web',
             }),
           ]),
           Animated.parallel([
             Animated.timing(scaleAnim, {
               toValue: 1,
               duration: 600,
-              useNativeDriver: true,
+              useNativeDriver: Platform.OS !== 'web',
             }),
             Animated.timing(opacityAnim, {
               toValue: 1,
               duration: 600,
-              useNativeDriver: true,
+              useNativeDriver: Platform.OS !== 'web',
             }),
           ]),
         ])
