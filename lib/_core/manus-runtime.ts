@@ -8,8 +8,19 @@
  * User will manually login via the app's login page - no automatic cookie injection.
  */
 
-import { Platform } from "react-native";
 import type { Metrics } from "react-native-safe-area-context";
+
+// Safe Platform detection that works in Expo Go
+let Platform: { OS: string } | null = null;
+try {
+  const RNPlatform = require("react-native").Platform;
+  Platform = RNPlatform;
+} catch (e) {
+  // Fallback for environments where Platform is not available
+  Platform = {
+    OS: typeof window !== "undefined" ? "web" : "unknown",
+  };
+}
 
 // Debug logging with timestamps
 const DEBUG = true;
@@ -34,16 +45,16 @@ interface SpacePreviewerMessage {
 }
 
 function isInIframe(): boolean {
-  if (Platform.OS !== "web") return false;
+  if (!Platform || Platform.OS !== "web") return false;
   try {
-    return window.self !== window.top;
+    return typeof window !== "undefined" && window.self !== window.top;
   } catch {
     return true;
   }
 }
 
 function isWeb(): boolean {
-  return Platform.OS === "web";
+  return Platform?.OS === "web";
 }
 
 function sendToParent(type: MessageType, payload: Record<string, unknown> = {}): void {
