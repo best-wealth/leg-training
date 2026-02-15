@@ -355,3 +355,11 @@
 - [x] Verify app loads on web preview
 - [x] Verify all screens and features working
 - [x] App ready for Expo Go testing
+
+## Phase 57: Update Exercise Images with Correct URLs
+- [x] Upload jogging exercise image to CDN
+- [x] Upload box jump exercise image to CDN
+- [x] Update exercise-animation.tsx with correct image URLs
+- [x] Jogging: uaofGeJrTufHazqg.png
+- [x] Box Jump: MTVPTNNIuqmcwLkM.png
+- [ ] Test images load on Expo Go (CORS not an issue on native)
