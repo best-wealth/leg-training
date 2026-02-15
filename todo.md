@@ -341,3 +341,10 @@
 - [ ] Verify all features work on native device
 - [ ] Build .aab file for Android
 - [ ] Test .aab on Android device
+
+## Phase 55: Update Exercise Images
+- [x] Upload user-provided box jump image
+- [x] Fix jogging image loading issue
+- [x] Update exercise-animation.tsx with new image URLs
+- [x] Test updated images on web preview
+- [ ] Test updated images on Expo Go
