@@ -345,6 +345,7 @@
 ## Phase 55: Update Exercise Images
 - [x] Upload user-provided box jump image
 - [x] Fix jogging image loading issue
-- [x] Update exercise-animation.tsx with new image URLs
+- [x] Revert stretches images to original URLs
+- [x] Use box jump photo for Volleyball Spike Box Jump only
 - [x] Test updated images on web preview
 - [ ] Test updated images on Expo Go
