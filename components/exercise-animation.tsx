@@ -1,5 +1,5 @@
 import { View, Image, StyleSheet, Animated, Platform } from 'react-native';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface ExerciseAnimationProps {
   exerciseType: string;
@@ -22,6 +22,7 @@ const exerciseImages: Record<string, any> = {
 export function ExerciseAnimation({ exerciseType, isAnimating }: ExerciseAnimationProps) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     // Keep images static - no animations
@@ -32,7 +33,11 @@ export function ExerciseAnimation({ exerciseType, isAnimating }: ExerciseAnimati
   const image = exerciseImages[exerciseType];
 
   if (!image) {
-    return null;
+    return (
+      <View style={styles.container}>
+        <View style={styles.placeholderImage} />
+      </View>
+    );
   }
 
   return (
@@ -45,11 +50,16 @@ export function ExerciseAnimation({ exerciseType, isAnimating }: ExerciseAnimati
         },
       ]}
     >
-      <Image
-        source={image}
-        style={styles.image}
-        resizeMode="contain"
-      />
+      {!imageError ? (
+        <Image
+          source={image}
+          style={styles.image}
+          resizeMode="contain"
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <View style={styles.placeholderImage} />
+      )}
     </Animated.View>
   );
 }
@@ -65,5 +75,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 250,
     maxWidth: 300,
+  },
+  placeholderImage: {
+    width: 300,
+    height: 250,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 8,
   },
 });

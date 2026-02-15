@@ -49,12 +49,25 @@ const config: ExpoConfig = {
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
   newArchEnabled: false,
+  extra: {
+    eas: {
+      projectId: env.appId,
+    },
+  },
   ios: {
     bundleIdentifier: env.iosBundleId,
+    supportsTablet: true,
   },
   android: {
     package: env.androidPackage,
     permissions: ["POST_NOTIFICATIONS"],
+    adaptiveIcon: {
+      backgroundColor: "#E6F4FE",
+      foregroundImage: "./assets/images/android-icon-foreground.png",
+      backgroundImage: "./assets/images/android-icon-background.png",
+      monochromeImage: "./assets/images/android-icon-monochrome.png",
+    },
+    edgeToEdgeEnabled: true,
   },
   web: {
     output: "static",
@@ -76,6 +89,7 @@ const config: ExpoConfig = {
   experiments: {
     typedRoutes: true,
   },
+  owner: env.owner,
 };
 
 export default config;
