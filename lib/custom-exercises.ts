@@ -1,5 +1,52 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CustomExercise } from './types';
+import { Platform } from 'react-native';
+
+/**
+ * Safe wrapper for AsyncStorage to handle native platform errors
+ */
+const safeAsyncStorage = {
+  getItem: async (key: string): Promise<string | null> => {
+    try {
+      if (Platform.OS === 'web') {
+        return await AsyncStorage.getItem(key);
+      }
+      // Add small delay on native to ensure module is ready
+      return await new Promise<string | null>((resolve) => {
+        setTimeout(() => AsyncStorage.getItem(key).then(resolve).catch(() => resolve(null)), 100);
+      });
+    } catch (error) {
+      console.warn(`AsyncStorage.getItem error for ${key}:`, error);
+      return null;
+    }
+  },
+  setItem: async (key: string, value: string): Promise<void> => {
+    try {
+      if (Platform.OS === 'web') {
+        return await AsyncStorage.setItem(key, value);
+      }
+      // Add small delay on native to ensure module is ready
+      return await new Promise<void>((resolve) => {
+        setTimeout(() => AsyncStorage.setItem(key, value).then(() => resolve()).catch(() => resolve()), 100);
+      });
+    } catch (error) {
+      console.warn(`AsyncStorage.setItem error for ${key}:`, error);
+    }
+  },
+  removeItem: async (key: string): Promise<void> => {
+    try {
+      if (Platform.OS === 'web') {
+        return await AsyncStorage.removeItem(key);
+      }
+      // Add small delay on native to ensure module is ready
+      return await new Promise<void>((resolve) => {
+        setTimeout(() => AsyncStorage.removeItem(key).then(() => resolve()).catch(() => resolve()), 100);
+      });
+    } catch (error) {
+      console.warn(`AsyncStorage.removeItem error for ${key}:`, error);
+    }
+  },
+};
 
 const CUSTOM_EXERCISES_KEY = '@basketball_training_custom_exercises';
 
@@ -8,8 +55,8 @@ const CUSTOM_EXERCISES_KEY = '@basketball_training_custom_exercises';
  */
 export async function getAllCustomExercises(): Promise<CustomExercise[]> {
   try {
-    const data = await AsyncStorage.getItem(CUSTOM_EXERCISES_KEY);
-    return data ? JSON.parse(data) : [];
+    const data = await safeAsyncStorage.getItem(CUSTOM_EXERCISES_KEY);
+    return data && typeof data === 'string' ? JSON.parse(data) : [];
   } catch (error) {
     console.error('Error loading custom exercises:', error);
     return [];
@@ -50,7 +97,7 @@ export async function createCustomExercise(
   exercises.push(exercise);
   
   try {
-    await AsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
+    await safeAsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
   } catch (error) {
     console.error('Error saving custom exercise:', error);
     throw error;
@@ -77,7 +124,7 @@ export async function updateCustomExercise(
   exercises[index] = updated;
 
   try {
-    await AsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
+    await safeAsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
   } catch (error) {
     console.error('Error updating custom exercise:', error);
     throw error;
@@ -99,7 +146,7 @@ export async function deleteCustomExercise(id: string): Promise<boolean> {
   }
 
   try {
-    await AsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(filtered));
+    await safeAsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(filtered));
     return true;
   } catch (error) {
     console.error('Error deleting custom exercise:', error);
