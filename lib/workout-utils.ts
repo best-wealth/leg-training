@@ -33,7 +33,11 @@ export async function saveSession(session: WorkoutSession): Promise<void> {
 
 export async function getSessionById(sessionId: string): Promise<WorkoutSession | null> {
   const sessions = await getAllSessions();
-  return sessions.find(s => s.sessionId === sessionId) || null;
+  const found = sessions.find(s => s.sessionId === sessionId);
+  if (found) return found;
+  
+  // Return a default session when storage is disabled
+  return createNewSession(1);
 }
 
 export async function getActiveSession(): Promise<WorkoutSession | null> {
