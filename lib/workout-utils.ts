@@ -24,20 +24,39 @@ export function lbToKg(lb: number): number {
  * Session management
  */
 export async function getAllSessions(): Promise<WorkoutSession[]> {
-  return [];
+  try {
+    const data = await AsyncStorage.getItem(SESSIONS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading sessions:', error);
+    return [];
+  }
 }
 
 export async function saveSession(session: WorkoutSession): Promise<void> {
-  // Session saving disabled
+  try {
+    const sessions = await getAllSessions();
+    const existingIndex = sessions.findIndex(s => s.sessionId === session.sessionId);
+    
+    if (existingIndex >= 0) {
+      sessions[existingIndex] = session;
+    } else {
+      sessions.push(session);
+    }
+    
+    // Sort by session number descending
+    sessions.sort((a, b) => b.sessionNumber - a.sessionNumber);
+    
+    await AsyncStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+  } catch (error) {
+    console.error('Error saving session:', error);
+    throw error;
+  }
 }
 
 export async function getSessionById(sessionId: string): Promise<WorkoutSession | null> {
   const sessions = await getAllSessions();
-  const found = sessions.find(s => s.sessionId === sessionId);
-  if (found) return found;
-  
-  // Return a default session when storage is disabled
-  return createNewSession(1);
+  return sessions.find(s => s.sessionId === sessionId) || null;
 }
 
 export async function getActiveSession(): Promise<WorkoutSession | null> {
@@ -77,15 +96,57 @@ export function createNewSession(sessionNumber: number): WorkoutSession {
  * Settings management
  */
 export async function getSettings(): Promise<AppSettings> {
-  return { defaultWeightUnit: 'kg' };
+  try {
+    const data = await AsyncStorage.getItem(SETTINGS_KEY);
+    return data ? JSON.parse(data) : { defaultWeightUnit: 'kg' };
+  } catch (error) {
+    console.error('Error loading settings:', error);
+    return { defaultWeightUnit: 'kg' };
+  }
 }
 
 export async function saveSettings(settings: AppSettings): Promise<void> {
-  // Settings saving disabled
+  try {
+    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch (error) {
+    console.error('Error saving settings:', error);
+    throw error;
+  }
 }
 
 /**
- * Personal Records (PR) calculation
+ * Personal records management
+ */
+export async function getPersonalRecords(): Promise<PersonalRecord[]> {
+  try {
+    const data = await AsyncStorage.getItem('@basketball_training_prs');
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading personal records:', error);
+    return [];
+  }
+}
+
+export async function savePersonalRecord(pr: PersonalRecord): Promise<void> {
+  try {
+    const prs = await getPersonalRecords();
+    const existingIndex = prs.findIndex(p => p.exerciseId === pr.exerciseId);
+    
+    if (existingIndex >= 0) {
+      prs[existingIndex] = pr;
+    } else {
+      prs.push(pr);
+    }
+    
+    await AsyncStorage.setItem('@basketball_training_prs', JSON.stringify(prs));
+  } catch (error) {
+    console.error('Error saving personal record:', error);
+    throw error;
+  }
+}
+
+/**
+ * Calculate personal records from all sessions
  */
 export async function calculatePersonalRecords(): Promise<PersonalRecord[]> {
   const sessions = await getAllSessions();
@@ -95,12 +156,12 @@ export async function calculatePersonalRecords(): Promise<PersonalRecord[]> {
   
   for (const session of completedSessions) {
     for (const exerciseLog of session.exercises) {
-      if (!exerciseLog.weightKg || !exerciseLog.completed) continue;
+      if (!exerciseLog.completed || !exerciseLog.weightKg) continue;
       
-      const key = exerciseLog.exerciseName;
+      const key = exerciseLog.exerciseId;
       const existing = prMap.get(key);
       
-      if (!existing || exerciseLog.weightKg > existing.maxWeightKg) {
+      if (!existing || (exerciseLog.weightKg && exerciseLog.weightKg > (existing.maxWeightKg || 0))) {
         prMap.set(key, {
           exerciseId: exerciseLog.exerciseId,
           exerciseName: exerciseLog.exerciseName,

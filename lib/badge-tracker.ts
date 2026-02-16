@@ -13,7 +13,13 @@ export interface UnlockedBadge {
  * Get all unlocked badges
  */
 export async function getUnlockedBadges(): Promise<UnlockedBadge[]> {
-  return [];
+  try {
+    const data = await AsyncStorage.getItem(BADGES_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading badges:', error);
+    return [];
+  }
 }
 
 /**
@@ -39,6 +45,13 @@ export async function unlockBadge(badgeId: BadgeId): Promise<boolean> {
     id: badgeId,
     unlockedAt: new Date().toISOString(),
   });
+
+  try {
+    await AsyncStorage.setItem(BADGES_KEY, JSON.stringify(badges));
+  } catch (error) {
+    console.error('Error saving badges:', error);
+    throw error;
+  }
 
   return true; // Newly unlocked
 }
