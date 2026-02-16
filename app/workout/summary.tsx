@@ -8,7 +8,6 @@ import { getExerciseById } from "@/lib/combined-exercises";
 import { checkAndUnlockBadges } from "@/lib/badge-tracker";
 import { BADGES } from "@/lib/badges";
 import { checkForNewPRs, PRNotification } from "@/lib/pr-tracker";
-import * as Haptics from "expo-haptics";
 import { Platform, ScrollView, Text, View, ActivityIndicator, Pressable, PressableStateCallbackType } from "react-native";
 
 interface ExerciseWithWeight {
@@ -107,7 +106,6 @@ export default function WorkoutSummaryScreen() {
     if (!session) return;
 
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
 
     try {
@@ -120,7 +118,6 @@ export default function WorkoutSummaryScreen() {
         setShowingPRs(true);
         setCurrentPRIndex(0);
         if (Platform.OS !== "web") {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         }
         return;
       }
@@ -131,7 +128,6 @@ export default function WorkoutSummaryScreen() {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
         if (Platform.OS !== "web") {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         }
         setTimeout(() => {
           navigateToNextSession();
@@ -163,7 +159,6 @@ export default function WorkoutSummaryScreen() {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
         if (Platform.OS !== "web") {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         }
         setTimeout(() => {
           navigateToHomepage();

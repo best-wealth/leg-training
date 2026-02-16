@@ -5,7 +5,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getSettings, saveSettings } from "@/lib/workout-utils";
 import { useRouter } from "expo-router";
 import { AppSettings } from "@/lib/types";
-import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
 export default function ProfileScreen() {
@@ -29,7 +28,6 @@ export default function ProfileScreen() {
 
   const handleToggleUnit = async () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
 
     const newUnit: 'kg' | 'lb' = settings.defaultWeightUnit === 'kg' ? 'lb' : 'kg';

@@ -7,7 +7,6 @@ import { WorkoutSession, ExerciseLog } from "@/lib/types";
 import { getExerciseById as getDefaultExerciseById } from "@/lib/exercises";
 import { getExerciseById } from "@/lib/combined-exercises";
 import { ExerciseAnimation } from "@/components/exercise-animation";
-import * as Haptics from "expo-haptics";
 import { Platform, PanResponder, GestureResponderEvent, PanResponderGestureState } from "react-native";
 
 export default function ActiveWorkoutScreen() {
@@ -124,7 +123,6 @@ export default function ActiveWorkoutScreen() {
     if (!session) return;
 
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
 
     const currentExercise = session.exercises[currentExerciseIndex];
@@ -175,7 +173,6 @@ export default function ActiveWorkoutScreen() {
 
     if (allComplete) {
       if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
       // Navigate to summary screen
       router.push({
@@ -192,7 +189,6 @@ export default function ActiveWorkoutScreen() {
 
   const handleStartTimer = () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     setTimerRunning(!timerRunning);
   };

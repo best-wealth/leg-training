@@ -12,7 +12,6 @@ import {
   getLastWorkoutDate,
 } from "@/lib/workout-utils";
 import { WorkoutSession } from "@/lib/types";
-import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
 export default function HomeScreen() {
@@ -52,7 +51,6 @@ export default function HomeScreen() {
 
   const handleStartWorkout = async () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     
     try {
@@ -69,7 +67,6 @@ export default function HomeScreen() {
 
   const handleContinueWorkout = () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     
     if (activeSession) {

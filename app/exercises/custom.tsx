@@ -5,7 +5,6 @@ import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { getAllCustomExercises, deleteCustomExercise } from "@/lib/custom-exercises";
 import { CustomExercise } from "@/lib/types";
-import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
 export default function CustomExercisesScreen() {
@@ -33,14 +32,12 @@ export default function CustomExercisesScreen() {
 
   const handleAddExercise = () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     router.push("/exercises/create" as any);
   };
 
   const handleEditExercise = (exercise: CustomExercise) => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     router.push({
       pathname: "/exercises/edit" as any,
@@ -60,7 +57,6 @@ export default function CustomExercisesScreen() {
             try {
               await deleteCustomExercise(exercise.id);
               if (Platform.OS !== "web") {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               }
               loadExercises();
             } catch (error) {

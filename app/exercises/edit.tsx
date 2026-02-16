@@ -4,7 +4,6 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { getCustomExerciseById, updateCustomExercise } from "@/lib/custom-exercises";
 import { CustomExercise } from "@/lib/types";
-import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useColors } from "@/hooks/use-colors";
@@ -63,7 +62,6 @@ export default function EditExerciseScreen() {
     }
 
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
 
     setSaving(true);
@@ -82,7 +80,6 @@ export default function EditExerciseScreen() {
       });
 
       if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
 
       Alert.alert("Success", "Exercise updated!", [

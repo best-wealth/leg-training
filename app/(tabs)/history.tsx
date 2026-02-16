@@ -5,7 +5,6 @@ import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { getAllSessions } from "@/lib/workout-utils";
 import { WorkoutSession } from "@/lib/types";
-import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 
 export default function HistoryScreen() {
@@ -34,7 +33,6 @@ export default function HistoryScreen() {
 
   const handleSessionPress = (session: WorkoutSession) => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     router.push({
       pathname: "/session/detail" as any,
@@ -44,7 +42,6 @@ export default function HistoryScreen() {
 
   const handleClearHistory = async () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
     
     // Show confirmation
