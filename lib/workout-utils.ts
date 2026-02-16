@@ -70,6 +70,15 @@ export async function getNextSessionNumber(): Promise<number> {
   return Math.max(...sessions.map(s => s.sessionNumber)) + 1;
 }
 
+export async function clearAllSessions(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(SESSIONS_KEY);
+  } catch (error) {
+    console.error('Error clearing sessions:', error);
+    throw error;
+  }
+}
+
 /**
  * Create a new workout session
  */

@@ -12,6 +12,7 @@ export default function HistoryScreen() {
   const router = useRouter();
   const [sessions, setSessions] = useState<WorkoutSession[]>([]);
   const [loading, setLoading] = useState(true);
+  const [clearing, setClearing] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -39,6 +40,24 @@ export default function HistoryScreen() {
       pathname: "/session/detail" as any,
       params: { sessionId: session.sessionId },
     });
+  };
+
+  const handleClearHistory = async () => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+    
+    // Show confirmation
+    const { clearAllSessions } = await import("@/lib/workout-utils");
+    setClearing(true);
+    try {
+      await clearAllSessions();
+      setSessions([]);
+    } catch (error) {
+      console.error('Error clearing history:', error);
+    } finally {
+      setClearing(false);
+    }
   };
 
   const renderSession = ({ item }: { item: WorkoutSession }) => {
@@ -95,11 +114,24 @@ export default function HistoryScreen() {
   return (
     <ScreenContainer className="p-6">
       <View className="flex-1">
-        <View className="mb-4">
-          <Text className="text-3xl font-bold text-foreground">History</Text>
-          <Text className="text-sm text-muted mt-1">
-            {sessions.length} total session{sessions.length !== 1 ? 's' : ''}
-          </Text>
+        <View className="mb-4 flex-row justify-between items-start">
+          <View className="flex-1">
+            <Text className="text-3xl font-bold text-foreground">History</Text>
+            <Text className="text-sm text-muted mt-1">
+              {sessions.length} total session{sessions.length !== 1 ? 's' : ''}
+            </Text>
+          </View>
+          {sessions.length > 0 && (
+            <TouchableOpacity
+              onPress={handleClearHistory}
+              disabled={clearing}
+              className="bg-error px-4 py-2 rounded-lg ml-2"
+            >
+              <Text className="text-white text-sm font-semibold">
+                {clearing ? 'Clearing...' : 'Clear'}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {sessions.length === 0 ? (
