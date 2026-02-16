@@ -15,7 +15,7 @@ const exerciseImages: Record<string, any> = {
   'Seated Leg Curls': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/etSXRZulvNdsxPpe.png' },
   'Seated Leg Raises': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/VYJHTJEPZvFisfXj.png' },
   'Weighted Calf Raises': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/FBELKZYRwJhZaReC.png' },
-  'Weighted Hip Thrusts': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/etSXRZulvNdsxPpe.png' },
+  'Weighted Hip Thrusts': { uri: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305037201/XaPEybhJQvGlVaAi.png' },
   'Volleyball Spike Box Jump': null,
 };
 
