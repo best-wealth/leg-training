@@ -7,13 +7,7 @@ const CUSTOM_EXERCISES_KEY = '@basketball_training_custom_exercises';
  * Get all custom exercises
  */
 export async function getAllCustomExercises(): Promise<CustomExercise[]> {
-  try {
-    const data = await AsyncStorage.getItem(CUSTOM_EXERCISES_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch (error) {
-    console.error('Error loading custom exercises:', error);
-    return [];
-  }
+  return [];
 }
 
 /**
@@ -46,16 +40,6 @@ export async function createCustomExercise(
     createdAt: new Date().toISOString(),
     ...options,
   };
-
-  const exercises = await getAllCustomExercises();
-  exercises.push(exercise);
-  
-  try {
-    await AsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
-  } catch (error) {
-    console.error('Error saving custom exercise:', error);
-    throw error;
-  }
 
   return exercise;
 }

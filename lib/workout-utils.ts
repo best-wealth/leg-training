@@ -24,34 +24,11 @@ export function lbToKg(lb: number): number {
  * Session management
  */
 export async function getAllSessions(): Promise<WorkoutSession[]> {
-  try {
-    const data = await AsyncStorage.getItem(SESSIONS_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch (error) {
-    console.error('Error loading sessions:', error);
-    return [];
-  }
+  return [];
 }
 
 export async function saveSession(session: WorkoutSession): Promise<void> {
-  try {
-    const sessions = await getAllSessions();
-    const existingIndex = sessions.findIndex(s => s.sessionId === session.sessionId);
-    
-    if (existingIndex >= 0) {
-      sessions[existingIndex] = session;
-    } else {
-      sessions.push(session);
-    }
-    
-    // Sort by session number descending
-    sessions.sort((a, b) => b.sessionNumber - a.sessionNumber);
-    
-    await AsyncStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
-  } catch (error) {
-    console.error('Error saving session:', error);
-    throw error;
-  }
+  // Session saving disabled
 }
 
 export async function getSessionById(sessionId: string): Promise<WorkoutSession | null> {
@@ -96,22 +73,11 @@ export function createNewSession(sessionNumber: number): WorkoutSession {
  * Settings management
  */
 export async function getSettings(): Promise<AppSettings> {
-  try {
-    const data = await AsyncStorage.getItem(SETTINGS_KEY);
-    return data ? JSON.parse(data) : { defaultWeightUnit: 'kg' };
-  } catch (error) {
-    console.error('Error loading settings:', error);
-    return { defaultWeightUnit: 'kg' };
-  }
+  return { defaultWeightUnit: 'kg' };
 }
 
 export async function saveSettings(settings: AppSettings): Promise<void> {
-  try {
-    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  } catch (error) {
-    console.error('Error saving settings:', error);
-    throw error;
-  }
+  // Settings saving disabled
 }
 
 /**
