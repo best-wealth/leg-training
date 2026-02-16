@@ -3,18 +3,15 @@ import { CustomExercise } from './types';
 import { Platform } from 'react-native';
 
 /**
- * Safe wrapper for AsyncStorage to handle native platform errors
+ * Safe wrapper for AsyncStorage - DISABLED on native platforms
  */
 const safeAsyncStorage = {
   getItem: async (key: string): Promise<string | null> => {
     try {
-      if (Platform.OS === 'web') {
-        return await AsyncStorage.getItem(key);
+      if (Platform.OS !== 'web') {
+        return null;
       }
-      // Add small delay on native to ensure module is ready
-      return await new Promise<string | null>((resolve) => {
-        setTimeout(() => AsyncStorage.getItem(key).then(resolve).catch(() => resolve(null)), 100);
-      });
+      return await AsyncStorage.getItem(key);
     } catch (error) {
       console.warn(`AsyncStorage.getItem error for ${key}:`, error);
       return null;
@@ -22,26 +19,20 @@ const safeAsyncStorage = {
   },
   setItem: async (key: string, value: string): Promise<void> => {
     try {
-      if (Platform.OS === 'web') {
-        return await AsyncStorage.setItem(key, value);
+      if (Platform.OS !== 'web') {
+        return;
       }
-      // Add small delay on native to ensure module is ready
-      return await new Promise<void>((resolve) => {
-        setTimeout(() => AsyncStorage.setItem(key, value).then(() => resolve()).catch(() => resolve()), 100);
-      });
+      return await AsyncStorage.setItem(key, value);
     } catch (error) {
       console.warn(`AsyncStorage.setItem error for ${key}:`, error);
     }
   },
   removeItem: async (key: string): Promise<void> => {
     try {
-      if (Platform.OS === 'web') {
-        return await AsyncStorage.removeItem(key);
+      if (Platform.OS !== 'web') {
+        return;
       }
-      // Add small delay on native to ensure module is ready
-      return await new Promise<void>((resolve) => {
-        setTimeout(() => AsyncStorage.removeItem(key).then(() => resolve()).catch(() => resolve()), 100);
-      });
+      return await AsyncStorage.removeItem(key);
     } catch (error) {
       console.warn(`AsyncStorage.removeItem error for ${key}:`, error);
     }
