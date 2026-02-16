@@ -1,34 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from './memory-storage';
 import { BadgeId, BADGES } from './badges';
 import { WorkoutSession } from './types';
-import { Platform } from 'react-native';
-
-/**
- * Safe wrapper for AsyncStorage - DISABLED on native platforms
- */
-const safeAsyncStorage = {
-  getItem: async (key: string): Promise<string | null> => {
-    try {
-      if (Platform.OS !== 'web') {
-        return null;
-      }
-      return await AsyncStorage.getItem(key);
-    } catch (error) {
-      console.warn(`AsyncStorage.getItem error for ${key}:`, error);
-      return null;
-    }
-  },
-  setItem: async (key: string, value: string): Promise<void> => {
-    try {
-      if (Platform.OS !== 'web') {
-        return;
-      }
-      return await AsyncStorage.setItem(key, value);
-    } catch (error) {
-      console.warn(`AsyncStorage.setItem error for ${key}:`, error);
-    }
-  },
-};
 
 const BADGES_KEY = '@basketball_training_badges';
 
@@ -42,7 +14,7 @@ export interface UnlockedBadge {
  */
 export async function getUnlockedBadges(): Promise<UnlockedBadge[]> {
   try {
-    const data = await safeAsyncStorage.getItem(BADGES_KEY);
+    const data = await storage.getItem(BADGES_KEY);
     return data && typeof data === 'string' ? JSON.parse(data) : [];
   } catch (error) {
     console.error('Error loading badges:', error);
@@ -75,7 +47,7 @@ export async function unlockBadge(badgeId: BadgeId): Promise<boolean> {
   });
 
   try {
-    await safeAsyncStorage.setItem(BADGES_KEY, JSON.stringify(badges));
+    await storage.setItem(BADGES_KEY, JSON.stringify(badges));
   } catch (error) {
     console.error('Error saving badges:', error);
     throw error;

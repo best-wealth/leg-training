@@ -1,43 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from './memory-storage';
 import { CustomExercise } from './types';
-import { Platform } from 'react-native';
-
-/**
- * Safe wrapper for AsyncStorage - DISABLED on native platforms
- */
-const safeAsyncStorage = {
-  getItem: async (key: string): Promise<string | null> => {
-    try {
-      if (Platform.OS !== 'web') {
-        return null;
-      }
-      return await AsyncStorage.getItem(key);
-    } catch (error) {
-      console.warn(`AsyncStorage.getItem error for ${key}:`, error);
-      return null;
-    }
-  },
-  setItem: async (key: string, value: string): Promise<void> => {
-    try {
-      if (Platform.OS !== 'web') {
-        return;
-      }
-      return await AsyncStorage.setItem(key, value);
-    } catch (error) {
-      console.warn(`AsyncStorage.setItem error for ${key}:`, error);
-    }
-  },
-  removeItem: async (key: string): Promise<void> => {
-    try {
-      if (Platform.OS !== 'web') {
-        return;
-      }
-      return await AsyncStorage.removeItem(key);
-    } catch (error) {
-      console.warn(`AsyncStorage.removeItem error for ${key}:`, error);
-    }
-  },
-};
 
 const CUSTOM_EXERCISES_KEY = '@basketball_training_custom_exercises';
 
@@ -46,7 +8,7 @@ const CUSTOM_EXERCISES_KEY = '@basketball_training_custom_exercises';
  */
 export async function getAllCustomExercises(): Promise<CustomExercise[]> {
   try {
-    const data = await safeAsyncStorage.getItem(CUSTOM_EXERCISES_KEY);
+    const data = await storage.getItem(CUSTOM_EXERCISES_KEY);
     return data && typeof data === 'string' ? JSON.parse(data) : [];
   } catch (error) {
     console.error('Error loading custom exercises:', error);
@@ -88,7 +50,7 @@ export async function createCustomExercise(
   exercises.push(exercise);
   
   try {
-    await safeAsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
+    await storage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
   } catch (error) {
     console.error('Error saving custom exercise:', error);
     throw error;
@@ -115,7 +77,7 @@ export async function updateCustomExercise(
   exercises[index] = updated;
 
   try {
-    await safeAsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
+    await storage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(exercises));
   } catch (error) {
     console.error('Error updating custom exercise:', error);
     throw error;
@@ -137,7 +99,7 @@ export async function deleteCustomExercise(id: string): Promise<boolean> {
   }
 
   try {
-    await safeAsyncStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(filtered));
+    await storage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(filtered));
     return true;
   } catch (error) {
     console.error('Error deleting custom exercise:', error);

@@ -1,48 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from './memory-storage';
 import { WorkoutSession, AppSettings, PersonalRecord, ExerciseLog } from './types';
 import { EXERCISES } from './exercises';
-import { Platform } from 'react-native';
-
-/**
- * Safe wrapper for AsyncStorage - DISABLED on native platforms
- * This prevents Handler.java and ActivityThread.java errors on Android
- */
-const safeAsyncStorage = {
-  getItem: async (key: string): Promise<string | null> => {
-    try {
-      // Only use AsyncStorage on web platform
-      if (Platform.OS !== 'web') {
-        return null;
-      }
-      return await AsyncStorage.getItem(key);
-    } catch (error) {
-      console.warn(`AsyncStorage.getItem error for ${key}:`, error);
-      return null;
-    }
-  },
-  setItem: async (key: string, value: string): Promise<void> => {
-    try {
-      // Only use AsyncStorage on web platform
-      if (Platform.OS !== 'web') {
-        return;
-      }
-      return await AsyncStorage.setItem(key, value);
-    } catch (error) {
-      console.warn(`AsyncStorage.setItem error for ${key}:`, error);
-    }
-  },
-  removeItem: async (key: string): Promise<void> => {
-    try {
-      // Only use AsyncStorage on web platform
-      if (Platform.OS !== 'web') {
-        return;
-      }
-      return await AsyncStorage.removeItem(key);
-    } catch (error) {
-      console.warn(`AsyncStorage.removeItem error for ${key}:`, error);
-    }
-  },
-};
 
 /**
  * Sanitize exercise log to ensure all boolean fields are properly typed
@@ -100,7 +58,7 @@ export function lbToKg(lb: number): number {
  */
 export async function getAllSessions(): Promise<WorkoutSession[]> {
   try {
-    const data = await safeAsyncStorage.getItem(SESSIONS_KEY);
+    const data = await storage.getItem(SESSIONS_KEY);
     if (!data || typeof data !== 'string') return [];
     const parsed = JSON.parse(data);
     return Array.isArray(parsed) ? parsed.map(sanitizeWorkoutSession) : [];
@@ -124,7 +82,7 @@ export async function saveSession(session: WorkoutSession): Promise<void> {
     // Sort by session number descending
     sessions.sort((a, b) => b.sessionNumber - a.sessionNumber);
     
-    await safeAsyncStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+    await storage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
   } catch (error) {
     console.error('Error saving session:', error);
     throw error;
@@ -150,7 +108,7 @@ export async function getNextSessionNumber(): Promise<number> {
 
 export async function clearAllSessions(): Promise<void> {
   try {
-    await safeAsyncStorage.removeItem(SESSIONS_KEY);
+    await storage.removeItem(SESSIONS_KEY);
   } catch (error) {
     console.error('Error clearing sessions:', error);
     throw error;
@@ -184,7 +142,7 @@ export function createNewSession(sessionNumber: number): WorkoutSession {
  */
 export async function getSettings(): Promise<AppSettings> {
   try {
-    const data = await safeAsyncStorage.getItem(SETTINGS_KEY);
+    const data = await storage.getItem(SETTINGS_KEY);
     return data && typeof data === 'string' ? JSON.parse(data) : { defaultWeightUnit: 'kg' };
   } catch (error) {
     console.error('Error loading settings:', error);
@@ -194,7 +152,7 @@ export async function getSettings(): Promise<AppSettings> {
 
 export async function saveSettings(settings: AppSettings): Promise<void> {
   try {
-    await safeAsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    await storage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   } catch (error) {
     console.error('Error saving settings:', error);
     throw error;
@@ -206,7 +164,7 @@ export async function saveSettings(settings: AppSettings): Promise<void> {
  */
 export async function getPersonalRecords(): Promise<PersonalRecord[]> {
   try {
-    const data = await safeAsyncStorage.getItem('@basketball_training_prs');
+    const data = await storage.getItem('@basketball_training_prs');
     return data && typeof data === 'string' ? JSON.parse(data) : [];
   } catch (error) {
     console.error('Error loading personal records:', error);
@@ -225,7 +183,7 @@ export async function savePersonalRecord(pr: PersonalRecord): Promise<void> {
       prs.push(pr);
     }
     
-    await safeAsyncStorage.setItem('@basketball_training_prs', JSON.stringify(prs));
+    await storage.setItem('@basketball_training_prs', JSON.stringify(prs));
   } catch (error) {
     console.error('Error saving personal record:', error);
     throw error;
