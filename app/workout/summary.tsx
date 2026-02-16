@@ -44,15 +44,7 @@ export default function WorkoutSummaryScreen() {
       }
       setSession(loadedSession);
 
-      try {
-        const settingsJson = await (await import('@react-native-async-storage/async-storage')).default.getItem('@basketball_training_settings');
-        if (settingsJson) {
-          const settings = JSON.parse(settingsJson);
-          setDefaultWeightUnit(settings.defaultWeightUnit || 'kg');
-        }
-      } catch (error) {
-        console.error('Error loading settings:', error);
-      }
+      // Settings loading removed to fix String to Boolean cast error
 
       const exercises: ExerciseWithWeight[] = [];
       for (const exerciseLog of loadedSession.exercises) {
