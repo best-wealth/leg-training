@@ -30,11 +30,19 @@ export const storage = {
       if (Platform.OS === 'web') {
         const localStorage = getLocalStorage();
         if (localStorage) {
-          return localStorage.getItem(key);
+          const value = localStorage.getItem(key);
+          console.log(`📖 Retrieved from localStorage: ${key} (${value ? value.length : 0} bytes)`);
+          return value;
+        } else {
+          console.warn(`⚠️ localStorage not available, checking memory cache for ${key}`);
         }
       }
       // Fallback to memory cache on native or if localStorage fails
-      return memoryCache.get(key) || null;
+      const cached = memoryCache.get(key);
+      if (cached) {
+        console.log(`📖 Retrieved from memory cache: ${key}`);
+      }
+      return cached || null;
     } catch (error) {
       console.warn(`storage.getItem error for ${key}:`, error);
       return memoryCache.get(key) || null;
@@ -48,12 +56,16 @@ export const storage = {
     try {
       // Always cache in memory as backup
       memoryCache.set(key, value);
+      console.log(`💾 Storage.setItem: ${key} (${value.length} bytes)`);
       
       if (Platform.OS === 'web') {
         const localStorage = getLocalStorage();
         if (localStorage) {
           localStorage.setItem(key, value);
+          console.log(`✅ Saved to localStorage: ${key}`);
           return;
+        } else {
+          console.warn(`⚠️ localStorage not available, using memory cache for ${key}`);
         }
       }
     } catch (error) {

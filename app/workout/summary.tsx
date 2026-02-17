@@ -110,6 +110,8 @@ export default function WorkoutSummaryScreen() {
 
     try {
       const allSessions = await getAllSessions();
+      console.log('handleDone - allSessions:', allSessions.length);
+      console.log('handleDone - current session completed:', session.completed);
       
       // Check for new PRs
       const prs = checkForNewPRs(allSessions, session, defaultWeightUnit as 'kg' | 'lb');
@@ -123,7 +125,9 @@ export default function WorkoutSummaryScreen() {
       }
 
       // Check for new badges
+      console.log('Calling checkAndUnlockBadges...');
       const unlockedBadges = await checkAndUnlockBadges(allSessions, session);
+      console.log('Badges unlocked:', unlockedBadges);
       if (unlockedBadges.length > 0) {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
