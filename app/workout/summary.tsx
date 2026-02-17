@@ -34,6 +34,12 @@ export default function WorkoutSummaryScreen() {
     loadSessionAndExercises();
   }, [sessionId]);
 
+  useEffect(() => {
+    if (session && !showingBadges && !showingPRs) {
+      handleDone();
+    }
+  }, [session]);
+
   const loadSessionAndExercises = async () => {
     setLoading(true);
     try {
@@ -41,6 +47,7 @@ export default function WorkoutSummaryScreen() {
       if (!loadedSession) {
         throw new Error('Session not found');
       }
+      console.log('📊 Loaded session:', { sessionId: loadedSession.sessionId, completed: loadedSession.completed, exerciseCount: loadedSession.exercises.length });
       setSession(loadedSession);
 
       // Settings loading removed to fix String to Boolean cast error
@@ -103,15 +110,20 @@ export default function WorkoutSummaryScreen() {
   };
 
   const handleDone = async () => {
-    if (!session) return;
+    if (!session) {
+      console.log('❌ handleDone: session is null');
+      return;
+    }
 
     if (Platform.OS !== "web") {
     }
 
     try {
       const allSessions = await getAllSessions();
-      console.log('handleDone - allSessions:', allSessions.length);
-      console.log('handleDone - current session completed:', session.completed);
+      console.log('✅ handleDone called');
+      console.log('📊 handleDone - allSessions:', allSessions.length);
+      console.log('📊 handleDone - current session completed:', session.completed);
+      console.log('📊 handleDone - current session exercises:', session.exercises.length);
       
       // Check for new PRs
       const prs = checkForNewPRs(allSessions, session, defaultWeightUnit as 'kg' | 'lb');
@@ -125,9 +137,9 @@ export default function WorkoutSummaryScreen() {
       }
 
       // Check for new badges
-      console.log('Calling checkAndUnlockBadges...');
+      console.log('🏆 Calling checkAndUnlockBadges...');
       const unlockedBadges = await checkAndUnlockBadges(allSessions, session);
-      console.log('Badges unlocked:', unlockedBadges);
+      console.log('🏆 Badges unlocked:', unlockedBadges);
       if (unlockedBadges.length > 0) {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
@@ -140,7 +152,7 @@ export default function WorkoutSummaryScreen() {
         navigateToNextSession();
       }
     } catch (error) {
-      console.error('Error checking PRs and badges:', error);
+      console.error('❌ Error checking PRs and badges:', error);
       navigateToNextSession();
     }
   };
@@ -158,7 +170,9 @@ export default function WorkoutSummaryScreen() {
   const handleBadgesAfterPRs = async () => {
     try {
       const allSessions = await getAllSessions();
+      console.log('🏆 handleBadgesAfterPRs - checking badges');
       const unlockedBadges = await checkAndUnlockBadges(allSessions, session!);
+      console.log('🏆 handleBadgesAfterPRs - unlocked:', unlockedBadges);
       if (unlockedBadges.length > 0) {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
@@ -168,15 +182,17 @@ export default function WorkoutSummaryScreen() {
           navigateToHomepage();
         }, 3000);
       } else {
+        console.log('ℹ️ No badges unlocked, navigating to next session');
         navigateToNextSession();
       }
     } catch (error) {
-      console.error('Error checking badges:', error);
+      console.error('❌ Error checking badges:', error);
       navigateToNextSession();
     }
   };
 
   const navigateToHomepage = () => {
+    console.log('🏠 Navigating to homepage');
     router.push("/" as any);
   };
 
@@ -395,7 +411,7 @@ export default function WorkoutSummaryScreen() {
 
           <View className="gap-3 mt-4">
             <Pressable
-              onPress={navigateToHomepage}
+              onPress={handleDone}
               style={({ pressed }: PressableStateCallbackType) => ({
                 transform: [{ scale: pressed ? 0.97 : 1 }],
                 opacity: pressed ? 0.9 : 1,
@@ -403,7 +419,7 @@ export default function WorkoutSummaryScreen() {
               className="bg-primary px-8 py-4 rounded-full w-full"
             >
               <Text className="text-white text-center font-bold text-lg">
-                Home
+                Done
               </Text>
             </Pressable>
           </View>
