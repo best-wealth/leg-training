@@ -4,16 +4,18 @@ import { Stack } from 'expo-router';
 import LoginScreen from './login';
 
 export function AuthWrapper() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Default to authenticated
   const [isLoading, setIsLoading] = useState(true);
 
   // Check authentication on mount and listen for changes
   useEffect(() => {
     const checkAuth = () => {
-      const authenticated = localStorage.getItem('app_authenticated') === 'true';
-      setIsAuthenticated(authenticated);
+      // Default to authenticated (home page is default)
+      // Only show login if explicitly logged out
+      const isLoggedOut = localStorage.getItem('app_logged_out') === 'true';
+      setIsAuthenticated(!isLoggedOut);
       setIsLoading(false);
-      console.log('Auth check:', authenticated);
+      console.log('Auth check - logged out:', isLoggedOut);
     };
     
     checkAuth();

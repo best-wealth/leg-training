@@ -1,4 +1,3 @@
-import { ScrollView, Text, View, TouchableOpacity, ActivityIndicator, Pressable, PressableStateCallbackType } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useRouter } from "expo-router";
 import { useState, useEffect, useCallback } from "react";
@@ -12,7 +11,8 @@ import {
   getLastWorkoutDate,
 } from "@/lib/workout-utils";
 import { WorkoutSession } from "@/lib/types";
-import { Platform } from "react-native";
+import { Platform, View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import type { PressableStateCallbackType } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -168,6 +168,19 @@ export default function HomeScreen() {
               Track your weights and progress over time.
             </Text>
           </View>
+
+          {/* Promo Code Link */}
+          <Pressable
+            onPress={() => router.push("/promo-code" as any)}
+            style={({ pressed }: PressableStateCallbackType) => ({
+              opacity: pressed ? 0.7 : 1,
+            })}
+            className="items-center py-3 mt-4"
+          >
+            <Text className="text-primary font-semibold text-base underline">
+              Enter Promo Code
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
     </ScreenContainer>
