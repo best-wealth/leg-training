@@ -1,11 +1,22 @@
 {
-  "buildCommand": "npx expo export --platform web",
+  "buildCommand": "pnpm build",
   "outputDirectory": "dist",
   "framework": "other",
   "installCommand": "pnpm install",
   "env": {
     "NODE_ENV": "production"
   },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/:path*",
