@@ -65,11 +65,20 @@ export async function checkAndUnlockBadges(
 ): Promise<BadgeId[]> {
   const newlyUnlocked: BadgeId[] = [];
 
-  // Session count badges - include the current session in the count
-  const sessionCount = sessions.length + (currentSession.completed ? 1 : 0);
+  // Session count badges - count only completed sessions including the current one
+  const completedSessions = sessions.filter(s => s.completed).length;
+  const sessionCount = currentSession.completed ? completedSessions + 1 : completedSessions;
+  
+  console.log('🏆 Badge Check:', {
+    completedSessions,
+    currentSessionCompleted: currentSession.completed,
+    sessionCount,
+    exercisesInCurrentSession: currentSession.exercises.length,
+  });
 
   if (sessionCount >= 1 && !(await isBadgeUnlocked('first_session'))) {
     if (await unlockBadge('first_session')) {
+      console.log('🏆 Unlocked: first_session');
       newlyUnlocked.push('first_session');
     }
   }
