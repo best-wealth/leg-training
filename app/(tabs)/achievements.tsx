@@ -1,9 +1,9 @@
-import { ScrollView, Text, View, ActivityIndicator, FlatList, TouchableOpacity, Alert } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator, FlatList, TouchableOpacity, Alert, Pressable } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { getAllBadges, Badge } from "@/lib/badges";
-import { getUnlockedBadges, UnlockedBadge, getBadgeProgress } from "@/lib/badge-tracker";
+import { getUnlockedBadges, UnlockedBadge, getBadgeProgress, unlockBadge } from "@/lib/badge-tracker";
 import { getAllSessions } from "@/lib/workout-utils";
 import { generateBadgeShareMessage, shareNatively } from "@/lib/social-share";
 
@@ -39,6 +39,17 @@ export default function AchievementsScreen() {
 
   const isBadgeUnlocked = (badgeId: string): boolean => {
     return unlockedBadges.some(b => b.id === badgeId);
+  };
+
+  const handleTestUnlock = async () => {
+    try {
+      console.log('Testing badge unlock...');
+      const result = await unlockBadge('first_session');
+      console.log('Unlock result:', result);
+      await loadData();
+    } catch (error) {
+      console.error('Test unlock error:', error);
+    }
   };
 
   const handleShareBadge = async (badge: Badge) => {
@@ -144,6 +155,15 @@ export default function AchievementsScreen() {
     <ScreenContainer className="p-6">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex-1 gap-6">
+          {/* Test Button */}
+          <Pressable
+            onPress={handleTestUnlock}
+            style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+            className="bg-yellow-500 rounded-lg p-3"
+          >
+            <Text className="text-center font-bold text-black">Test Unlock Badge</Text>
+          </Pressable>
+
           {/* Header */}
           <View className="gap-2">
             <Text className="text-3xl font-bold text-foreground">Achievements</Text>

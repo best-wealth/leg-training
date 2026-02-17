@@ -63,6 +63,7 @@ export async function checkAndUnlockBadges(
   sessions: WorkoutSession[],
   currentSession: WorkoutSession
 ): Promise<BadgeId[]> {
+  console.log('🏆 checkAndUnlockBadges called with:', { sessionsCount: sessions.length, currentSessionId: currentSession.sessionId });
   const newlyUnlocked: BadgeId[] = [];
 
   // Session count badges - count only completed sessions including the current one
