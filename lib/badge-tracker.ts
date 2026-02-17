@@ -120,14 +120,19 @@ export async function checkAndUnlockBadges(
       if (exercise.exerciseName.includes('Leg Curl')) {
         if (exercise.weightKg >= 80 && !(await isBadgeUnlocked('leg_curl_100kg'))) {
           if (await unlockBadge('leg_curl_100kg')) {
+            console.log('🏆 Unlocked: leg_curl_100kg');
             newlyUnlocked.push('leg_curl_100kg');
           }
-        } else if (exercise.weightKg >= 60 && !(await isBadgeUnlocked('leg_curl_75kg'))) {
+        }
+        if (exercise.weightKg >= 60 && !(await isBadgeUnlocked('leg_curl_75kg'))) {
           if (await unlockBadge('leg_curl_75kg')) {
+            console.log('🏆 Unlocked: leg_curl_75kg');
             newlyUnlocked.push('leg_curl_75kg');
           }
-        } else if (exercise.weightKg >= 40 && !(await isBadgeUnlocked('leg_curl_50kg'))) {
+        }
+        if (exercise.weightKg >= 40 && !(await isBadgeUnlocked('leg_curl_50kg'))) {
           if (await unlockBadge('leg_curl_50kg')) {
+            console.log('🏆 Unlocked: leg_curl_50kg');
             newlyUnlocked.push('leg_curl_50kg');
           }
         }
@@ -137,14 +142,19 @@ export async function checkAndUnlockBadges(
       if (exercise.exerciseName.includes('Leg Raise')) {
         if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('leg_raise_100kg'))) {
           if (await unlockBadge('leg_raise_100kg')) {
+            console.log('🏆 Unlocked: leg_raise_100kg');
             newlyUnlocked.push('leg_raise_100kg');
           }
-        } else if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('leg_raise_75kg'))) {
+        }
+        if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('leg_raise_75kg'))) {
           if (await unlockBadge('leg_raise_75kg')) {
+            console.log('🏆 Unlocked: leg_raise_75kg');
             newlyUnlocked.push('leg_raise_75kg');
           }
-        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('leg_raise_50kg'))) {
+        }
+        if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('leg_raise_50kg'))) {
           if (await unlockBadge('leg_raise_50kg')) {
+            console.log('🏆 Unlocked: leg_raise_50kg');
             newlyUnlocked.push('leg_raise_50kg');
           }
         }
@@ -154,14 +164,19 @@ export async function checkAndUnlockBadges(
       if (exercise.exerciseName.includes('Calf Raise')) {
         if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('calf_raise_150kg'))) {
           if (await unlockBadge('calf_raise_150kg')) {
+            console.log('🏆 Unlocked: calf_raise_150kg');
             newlyUnlocked.push('calf_raise_150kg');
           }
-        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('calf_raise_100kg'))) {
+        }
+        if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('calf_raise_100kg'))) {
           if (await unlockBadge('calf_raise_100kg')) {
+            console.log('🏆 Unlocked: calf_raise_100kg');
             newlyUnlocked.push('calf_raise_100kg');
           }
-        } else if (exercise.weightKg >= 25 && !(await isBadgeUnlocked('calf_raise_75kg'))) {
+        }
+        if (exercise.weightKg >= 25 && !(await isBadgeUnlocked('calf_raise_75kg'))) {
           if (await unlockBadge('calf_raise_75kg')) {
+            console.log('🏆 Unlocked: calf_raise_75kg');
             newlyUnlocked.push('calf_raise_75kg');
           }
         }
@@ -171,14 +186,19 @@ export async function checkAndUnlockBadges(
       if (exercise.exerciseName.includes('Hip Thrust')) {
         if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('hip_thrust_200kg'))) {
           if (await unlockBadge('hip_thrust_200kg')) {
+            console.log('🏆 Unlocked: hip_thrust_200kg');
             newlyUnlocked.push('hip_thrust_200kg');
           }
-        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('hip_thrust_150kg'))) {
+        }
+        if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('hip_thrust_150kg'))) {
           if (await unlockBadge('hip_thrust_150kg')) {
+            console.log('🏆 Unlocked: hip_thrust_150kg');
             newlyUnlocked.push('hip_thrust_150kg');
           }
-        } else if (exercise.weightKg >= 30 && !(await isBadgeUnlocked('hip_thrust_100kg'))) {
+        }
+        if (exercise.weightKg >= 30 && !(await isBadgeUnlocked('hip_thrust_100kg'))) {
           if (await unlockBadge('hip_thrust_100kg')) {
+            console.log('🏆 Unlocked: hip_thrust_100kg');
             newlyUnlocked.push('hip_thrust_100kg');
           }
         }
@@ -189,14 +209,19 @@ export async function checkAndUnlockBadges(
     if (exercise.boxJumpInches) {
       if (exercise.boxJumpInches >= 50 && !(await isBadgeUnlocked('box_jump_50in'))) {
         if (await unlockBadge('box_jump_50in')) {
+          console.log('🏆 Unlocked: box_jump_50in');
           newlyUnlocked.push('box_jump_50in');
         }
-      } else if (exercise.boxJumpInches >= 40 && !(await isBadgeUnlocked('box_jump_40in'))) {
+      }
+      if (exercise.boxJumpInches >= 40 && !(await isBadgeUnlocked('box_jump_40in'))) {
         if (await unlockBadge('box_jump_40in')) {
+          console.log('🏆 Unlocked: box_jump_40in');
           newlyUnlocked.push('box_jump_40in');
         }
-      } else if (exercise.boxJumpInches >= 30 && !(await isBadgeUnlocked('box_jump_30in'))) {
+      }
+      if (exercise.boxJumpInches >= 30 && !(await isBadgeUnlocked('box_jump_30in'))) {
         if (await unlockBadge('box_jump_30in')) {
+          console.log('🏆 Unlocked: box_jump_30in');
           newlyUnlocked.push('box_jump_30in');
         }
       }
