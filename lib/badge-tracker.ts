@@ -65,40 +65,40 @@ export async function checkAndUnlockBadges(
 ): Promise<BadgeId[]> {
   const newlyUnlocked: BadgeId[] = [];
 
-  // Session count badges
-  const sessionCount = sessions.length;
+  // Session count badges - include the current session in the count
+  const sessionCount = sessions.length + (currentSession.completed ? 1 : 0);
 
-  if (sessionCount === 1 && !(await isBadgeUnlocked('first_session'))) {
+  if (sessionCount >= 1 && !(await isBadgeUnlocked('first_session'))) {
     if (await unlockBadge('first_session')) {
       newlyUnlocked.push('first_session');
     }
   }
 
-  if (sessionCount === 5 && !(await isBadgeUnlocked('five_sessions'))) {
+  if (sessionCount >= 5 && !(await isBadgeUnlocked('five_sessions'))) {
     if (await unlockBadge('five_sessions')) {
       newlyUnlocked.push('five_sessions');
     }
   }
 
-  if (sessionCount === 10 && !(await isBadgeUnlocked('ten_sessions'))) {
+  if (sessionCount >= 10 && !(await isBadgeUnlocked('ten_sessions'))) {
     if (await unlockBadge('ten_sessions')) {
       newlyUnlocked.push('ten_sessions');
     }
   }
 
-  if (sessionCount === 25 && !(await isBadgeUnlocked('twenty_five_sessions'))) {
+  if (sessionCount >= 25 && !(await isBadgeUnlocked('twenty_five_sessions'))) {
     if (await unlockBadge('twenty_five_sessions')) {
       newlyUnlocked.push('twenty_five_sessions');
     }
   }
 
-  if (sessionCount === 50 && !(await isBadgeUnlocked('fifty_sessions'))) {
+  if (sessionCount >= 50 && !(await isBadgeUnlocked('fifty_sessions'))) {
     if (await unlockBadge('fifty_sessions')) {
       newlyUnlocked.push('fifty_sessions');
     }
   }
 
-  if (sessionCount === 100 && !(await isBadgeUnlocked('hundred_sessions'))) {
+  if (sessionCount >= 100 && !(await isBadgeUnlocked('hundred_sessions'))) {
     if (await unlockBadge('hundred_sessions')) {
       newlyUnlocked.push('hundred_sessions');
     }
