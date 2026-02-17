@@ -46,6 +46,15 @@ export default function RootLayout() {
 
   const [insets, setInsets] = useState<EdgeInsets>(initialInsets);
   const [frame, setFrame] = useState<Rect>(initialFrame);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const authenticated = localStorage.getItem('app_authenticated') === 'true';
+    setIsAuthenticated(authenticated);
+    setIsLoading(false);
+  }, []);
 
   // Initialize Manus runtime for cookie injection from parent container
   useEffect(() => {
@@ -89,6 +98,24 @@ export default function RootLayout() {
       },
     };
   }, [initialInsets, initialFrame]);
+
+  // If not authenticated, render nothing (login page will be shown by public/index.html)
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!isAuthenticated) {
+    // Authentication check failed, let the static login page handle it
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+        <Text>Redirecting to login...</Text>
+      </View>
+    );
+  }
 
   const content = (
     <QueryClientProvider client={queryClient}>
