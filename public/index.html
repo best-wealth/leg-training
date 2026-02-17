@@ -28,6 +28,11 @@
             padding: 40px;
             max-width: 400px;
             width: 100%;
+            display: none;
+        }
+
+        .login-container.show {
+            display: block;
         }
 
         .logo-section {
@@ -190,7 +195,12 @@
             to { transform: rotate(360deg); }
         }
 
-
+        .loading-message {
+            text-align: center;
+            font-size: 16px;
+            color: #667eea;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -231,7 +241,10 @@
         <a href="#" class="login-link" onclick="document.getElementById('loginForm').scrollIntoView({behavior: 'smooth'}); document.getElementById('promoCode').focus(); return false;">Go to Login</a>
     </div>
 
-
+    <div id="loadingMessage" class="loading-message" style="display: none;">
+        <div class="spinner"></div>
+        <p style="margin-top: 20px;">Loading app...</p>
+    </div>
 
     <script>
         const form = document.getElementById('loginForm');
@@ -241,18 +254,30 @@
         const submitBtn = document.getElementById('submitBtn');
         const loading = document.getElementById('loading');
         const loginContainer = document.getElementById('loginContainer');
+        const loadingMessage = document.getElementById('loadingMessage');
 
         const CORRECT_CODE = '2323';
 
         // Check if user is authenticated on page load
         function checkAuthentication() {
             const isAuthenticated = localStorage.getItem('app_authenticated') === 'true';
+            const urlParams = new URLSearchParams(window.location.search);
+            const authenticated = urlParams.get('authenticated');
             
-            if (isAuthenticated) {
-                // Redirect to app home
-                window.location.href = '/';
+            if (isAuthenticated || authenticated === 'true') {
+                // Show loading message and load the app
+                loginContainer.classList.remove('show');
+                loadingMessage.style.display = 'block';
+                
+                // Load the Expo app by reloading without the query param
+                setTimeout(() => {
+                    // Replace the history to remove the query param
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    // Force reload to load the app
+                    window.location.href = '/';
+                }, 500);
             } else {
-                loginContainer.style.display = 'block';
+                loginContainer.classList.add('show');
                 promoInput.focus();
             }
         }
@@ -313,9 +338,14 @@
                 // Set authentication flag in localStorage
                 localStorage.setItem('app_authenticated', 'true');
                 
-                // Redirect to app home after 1 second
+                // Hide login form and show loading
+                loginContainer.classList.remove('show');
+                loadingMessage.style.display = 'block';
+                
+                // Redirect to app after 1 second
                 setTimeout(() => {
-                    window.location.href = '/';
+                    // Redirect to the app with authenticated flag
+                    window.location.href = '/?authenticated=true';
                 }, 1000);
             } else {
                 errorMsg.textContent = 'Invalid promo code. Please try again.';
