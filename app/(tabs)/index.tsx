@@ -168,6 +168,19 @@ export default function HomeScreen() {
               Track your weights and progress over time.
             </Text>
           </View>
+
+          {/* Promo Code Link */}
+          <Pressable
+            onPress={() => router.push("/promo-code" as any)}
+            style={({ pressed }: PressableStateCallbackType) => ({
+              opacity: pressed ? 0.7 : 1,
+            })}
+            className="items-center py-3 mt-6"
+          >
+            <Text className="text-primary font-semibold text-base underline">
+              Enter Promo Code
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
     </ScreenContainer>
