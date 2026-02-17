@@ -48,7 +48,6 @@ export default function ProfileScreen() {
         <View className="flex-1 gap-6">
           <View>
             <Text className="text-3xl font-bold text-foreground">Profile</Text>
-            <Text className="text-sm text-muted mt-1">App settings and preferences</Text>
           </View>
 
 
