@@ -144,6 +144,32 @@
             margin-top: 20px;
         }
 
+        .login-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .login-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-link:active {
+            transform: translateY(0);
+        }
+
         .loading {
             display: none;
             text-align: center;
@@ -201,6 +227,8 @@
         <div class="info-text">
             Enter the 4-digit promo code to access the app
         </div>
+
+        <a href="#" class="login-link" onclick="document.getElementById('loginForm').scrollIntoView({behavior: 'smooth'}); document.getElementById('promoCode').focus(); return false;">Go to Login</a>
     </div>
 
 
