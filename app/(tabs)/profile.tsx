@@ -66,7 +66,7 @@ export default function ProfileScreen() {
                 targeting leg and hip strength to improve vertical leap performance on the court.
               </Text>
               <Text className="text-sm text-muted leading-relaxed mt-3">
-                This App should increase your vertical leap by at least 4 inches after reaching all the strength achievements to Master level.
+                This App should increase your vertical leap by at least 4 inches after reaching all the strength and plymometric achievements from Starter to Master level.
               </Text>
               <Text className="text-xs text-muted mt-3">Version 1.0.0</Text>
             </View>
