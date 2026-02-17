@@ -3,9 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import "react-native-reanimated";
-import { Platform } from "react-native";
+import { Platform, View, Text } from "react-native";
 import "@/lib/_core/nativewind-pressable";
 import { ThemeProvider } from "@/lib/theme-provider";
 import {
@@ -25,7 +23,24 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
+// Native error screen component
+function NativeErrorScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+      <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 16 }}>App Not Available</Text>
+      <Text style={{ fontSize: 14, textAlign: "center", paddingHorizontal: 20 }}>
+        This app is currently optimized for web only. Please visit the web version to use the app.
+      </Text>
+    </View>
+  );
+}
+
 export default function RootLayout() {
+  // Show error on native platforms
+  if (Platform.OS !== "web") {
+    return <NativeErrorScreen />;
+  }
+
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
 
@@ -76,18 +91,16 @@ export default function RootLayout() {
   }, [initialInsets, initialFrame]);
 
   const content = (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        {/* Default to hiding native headers so raw route segments don't appear (e.g. "(tabs)", "products/[id]"). */}
-        {/* If a screen needs the native header, explicitly enable it and set a human title via Stack.Screen options. */}
-        {/* in order for ios apps tab switching to work properly, use presentation: "fullScreenModal" for login page, whenever you decide to use presentation: "modal*/}
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="oauth/callback" />
-        </Stack>
-        <StatusBar style="auto" />
-      </QueryClientProvider>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      {/* Default to hiding native headers so raw route segments don't appear (e.g. "(tabs)", "products/[id]"). */}
+      {/* If a screen needs the native header, explicitly enable it and set a human title via Stack.Screen options. */}
+      {/* in order for ios apps tab switching to work properly, use presentation: "fullScreenModal" for login page, whenever you decide to use presentation: "modal*/}
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="oauth/callback" />
+      </Stack>
+      <StatusBar style="auto" />
+    </QueryClientProvider>
   );
 
   const shouldOverrideSafeArea = Platform.OS === "web";
