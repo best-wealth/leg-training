@@ -224,9 +224,14 @@
                     window.location.reload();
                 }, 1000);
             } else {
-                errorMsg.textContent = 'Invalid promo code. Please try again.';
-                errorMsg.classList.add('show');
-                submitBtn.disabled = false;
+                // Wrong promo code - redirect to error page
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Invalid Code...';
+                
+                // Show error page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/error.html?code=invalid_promo';
+                }, 2000);
             }
         }
 
