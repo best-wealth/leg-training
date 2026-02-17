@@ -51,62 +51,7 @@ export default function ProfileScreen() {
             <Text className="text-sm text-muted mt-1">App settings and preferences</Text>
           </View>
 
-          {/* Settings Section */}
-          <View className="gap-4">
-            <Text className="text-lg font-semibold text-foreground">Preferences</Text>
 
-            {/* Weight Unit Toggle */}
-            <View className="bg-surface rounded-xl p-4 border border-border">
-              <View className="flex-row justify-between items-center">
-                <View className="flex-1">
-                  <Text className="text-base font-semibold text-foreground">
-                    Default Weight Unit
-                  </Text>
-                  <Text className="text-sm text-muted mt-1">
-                    Choose your preferred unit for weight input
-                  </Text>
-                </View>
-              </View>
-
-              <View className="flex-row gap-3 mt-4">
-                <TouchableOpacity
-                  onPress={handleToggleUnit}
-                  activeOpacity={0.7}
-                  className={`flex-1 py-3 rounded-lg border ${
-                    settings.defaultWeightUnit === 'kg'
-                      ? 'bg-primary border-primary'
-                      : 'bg-background border-border'
-                  }`}
-                >
-                  <Text
-                    className={`text-center font-semibold ${
-                      settings.defaultWeightUnit === 'kg' ? 'text-white' : 'text-muted'
-                    }`}
-                  >
-                    Kilograms (kg)
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={handleToggleUnit}
-                  activeOpacity={0.7}
-                  className={`flex-1 py-3 rounded-lg border ${
-                    settings.defaultWeightUnit === 'lb'
-                      ? 'bg-primary border-primary'
-                      : 'bg-background border-border'
-                  }`}
-                >
-                  <Text
-                    className={`text-center font-semibold ${
-                      settings.defaultWeightUnit === 'lb' ? 'text-white' : 'text-muted'
-                    }`}
-                  >
-                    Pounds (lb)
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
 
           {/* About Section */}
           <View className="gap-4">
@@ -118,7 +63,10 @@ export default function ProfileScreen() {
               </Text>
               <Text className="text-sm text-muted leading-relaxed">
                 A comprehensive resistance training program designed for basketball players and volleyball players, 
-                targeting leg and hip strength to improve performance on the court.
+                targeting leg and hip strength to improve vertical leap performance on the court.
+              </Text>
+              <Text className="text-sm text-muted leading-relaxed mt-3">
+                This App should increase your vertical leap by at least 4 inches after reaching all the strength achievements to Master level.
               </Text>
               <Text className="text-xs text-muted mt-3">Version 1.0.0</Text>
             </View>
