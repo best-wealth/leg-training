@@ -107,6 +107,11 @@
             font-size: 14px;
             margin-bottom: 15px;
             display: none;
+            text-align: center;
+            padding: 10px;
+            background-color: #fee;
+            border-radius: 8px;
+            border: 1px solid #fcc;
         }
 
         .error-message.show {
@@ -181,6 +186,9 @@
 
     <div class="loading-message" id="loadingMessage">Loading app...</div>
 
+    <!-- React app will render here -->
+    <div id="root"></div>
+
     <script>
         // Check if already authenticated on page load
         function checkAuthentication() {
@@ -190,11 +198,7 @@
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('loadingMessage').classList.add('show');
                 // The app will load automatically through the Expo router
-                // Just wait for it to initialize
-                setTimeout(() => {
-                    // Reload to let the app's _layout.tsx take over
-                    window.location.reload();
-                }, 500);
+                // Don't reload - the app's _layout.tsx will detect authentication and render the app
             }
         }
 
@@ -219,19 +223,20 @@
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('loadingMessage').classList.add('show');
 
-                // Reload the page to let the app's _layout.tsx take over
+                // Navigate to the app home page
                 setTimeout(() => {
-                    window.location.reload();
+                    window.location.href = '/';
                 }, 1000);
             } else {
-                // Wrong promo code - redirect to error page
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Invalid Code...';
+                // Wrong promo code - show error message
+                errorMsg.textContent = 'Invalid promo code. Please try again.';
+                errorMsg.classList.add('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
                 
-                // Show error page after 2 seconds
-                setTimeout(() => {
-                    window.location.href = '/error.html?code=invalid_promo';
-                }, 2000);
+                // Clear input after showing error
+                document.getElementById('promoCode').value = '';
+                document.getElementById('promoCode').focus();
             }
         }
 
