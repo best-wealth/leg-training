@@ -109,15 +109,15 @@ export async function checkAndUnlockBadges(
     if (exercise.weightKg) {
       // Leg curl badges
       if (exercise.exerciseName.includes('Leg Curl')) {
-        if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('leg_curl_100kg'))) {
+        if (exercise.weightKg >= 80 && !(await isBadgeUnlocked('leg_curl_100kg'))) {
           if (await unlockBadge('leg_curl_100kg')) {
             newlyUnlocked.push('leg_curl_100kg');
           }
-        } else if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('leg_curl_75kg'))) {
+        } else if (exercise.weightKg >= 60 && !(await isBadgeUnlocked('leg_curl_75kg'))) {
           if (await unlockBadge('leg_curl_75kg')) {
             newlyUnlocked.push('leg_curl_75kg');
           }
-        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('leg_curl_50kg'))) {
+        } else if (exercise.weightKg >= 40 && !(await isBadgeUnlocked('leg_curl_50kg'))) {
           if (await unlockBadge('leg_curl_50kg')) {
             newlyUnlocked.push('leg_curl_50kg');
           }
@@ -143,15 +143,15 @@ export async function checkAndUnlockBadges(
 
       // Calf raise badges
       if (exercise.exerciseName.includes('Calf Raise')) {
-        if (exercise.weightKg >= 150 && !(await isBadgeUnlocked('calf_raise_150kg'))) {
+        if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('calf_raise_150kg'))) {
           if (await unlockBadge('calf_raise_150kg')) {
             newlyUnlocked.push('calf_raise_150kg');
           }
-        } else if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('calf_raise_100kg'))) {
+        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('calf_raise_100kg'))) {
           if (await unlockBadge('calf_raise_100kg')) {
             newlyUnlocked.push('calf_raise_100kg');
           }
-        } else if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('calf_raise_75kg'))) {
+        } else if (exercise.weightKg >= 25 && !(await isBadgeUnlocked('calf_raise_75kg'))) {
           if (await unlockBadge('calf_raise_75kg')) {
             newlyUnlocked.push('calf_raise_75kg');
           }
@@ -160,15 +160,15 @@ export async function checkAndUnlockBadges(
 
       // Hip thrust badges
       if (exercise.exerciseName.includes('Hip Thrust')) {
-        if (exercise.weightKg >= 200 && !(await isBadgeUnlocked('hip_thrust_200kg'))) {
+        if (exercise.weightKg >= 75 && !(await isBadgeUnlocked('hip_thrust_200kg'))) {
           if (await unlockBadge('hip_thrust_200kg')) {
             newlyUnlocked.push('hip_thrust_200kg');
           }
-        } else if (exercise.weightKg >= 150 && !(await isBadgeUnlocked('hip_thrust_150kg'))) {
+        } else if (exercise.weightKg >= 50 && !(await isBadgeUnlocked('hip_thrust_150kg'))) {
           if (await unlockBadge('hip_thrust_150kg')) {
             newlyUnlocked.push('hip_thrust_150kg');
           }
-        } else if (exercise.weightKg >= 100 && !(await isBadgeUnlocked('hip_thrust_100kg'))) {
+        } else if (exercise.weightKg >= 30 && !(await isBadgeUnlocked('hip_thrust_100kg'))) {
           if (await unlockBadge('hip_thrust_100kg')) {
             newlyUnlocked.push('hip_thrust_100kg');
           }
