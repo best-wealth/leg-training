@@ -363,3 +363,8 @@
 - [x] Jogging: uaofGeJrTufHazqg.png
 - [x] Box Jump: MTVPTNNIuqmcwLkM.png
 - [ ] Test images load on Expo Go (CORS not an issue on native)
+
+## Phase 58: Fix Post-Workout Flow
+- [x] Fix post-workout flow: show summary → PRs → home (not Exercise 1)
+- [x] Only show "Next PR" button if more PRs exist
+- [x] Show "Continue" button linking to home when no more PRs

@@ -146,10 +146,10 @@ export default function WorkoutSummaryScreen() {
         if (Platform.OS !== "web") {
         }
         setTimeout(() => {
-          navigateToNextSession();
+          navigateToHomepage();
         }, 3000);
       } else {
-        navigateToNextSession();
+        navigateToHomepage();
       }
     } catch (error) {
       console.error('❌ Error checking PRs and badges:', error);
@@ -167,6 +167,12 @@ export default function WorkoutSummaryScreen() {
     }
   };
 
+  const handleContinueAfterPRs = async () => {
+    // After all PRs shown, check for badges
+    setShowingPRs(false);
+    handleBadgesAfterPRs();
+  };
+
   const handleBadgesAfterPRs = async () => {
     try {
       const allSessions = await getAllSessions();
@@ -182,12 +188,12 @@ export default function WorkoutSummaryScreen() {
           navigateToHomepage();
         }, 3000);
       } else {
-        console.log('ℹ️ No badges unlocked, navigating to next session');
-        navigateToNextSession();
+        console.log('ℹ️ No badges unlocked, navigating to home');
+        navigateToHomepage();
       }
     } catch (error) {
       console.error('❌ Error checking badges:', error);
-      navigateToNextSession();
+      navigateToHomepage();
     }
   };
 
@@ -263,18 +269,29 @@ export default function WorkoutSummaryScreen() {
               >
                 <Text className="text-white text-center font-bold">📤 Share</Text>
               </Pressable>
-              <Pressable
-                onPress={handleNextPR}
-                style={({ pressed }: PressableStateCallbackType) => ({
-                  transform: [{ scale: pressed ? 0.97 : 1 }],
-                  opacity: pressed ? 0.9 : 1,
-                })}
-                className="flex-1 bg-primary px-6 py-3 rounded-full"
-              >
-                <Text className="text-white text-center font-bold">
-                  {currentPRIndex < newPRs.length - 1 ? 'Next PR' : 'Continue'}
-                </Text>
-              </Pressable>
+              {currentPRIndex < newPRs.length - 1 ? (
+                <Pressable
+                  onPress={handleNextPR}
+                  style={({ pressed }: PressableStateCallbackType) => ({
+                    transform: [{ scale: pressed ? 0.97 : 1 }],
+                    opacity: pressed ? 0.9 : 1,
+                  })}
+                  className="flex-1 bg-primary px-6 py-3 rounded-full"
+                >
+                  <Text className="text-white text-center font-bold">Next PR</Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={handleContinueAfterPRs}
+                  style={({ pressed }: PressableStateCallbackType) => ({
+                    transform: [{ scale: pressed ? 0.97 : 1 }],
+                    opacity: pressed ? 0.9 : 1,
+                  })}
+                  className="flex-1 bg-primary px-6 py-3 rounded-full"
+                >
+                  <Text className="text-white text-center font-bold">Continue</Text>
+                </Pressable>
+              )}
             </View>
 
             <Text className="text-xs text-muted text-center">
