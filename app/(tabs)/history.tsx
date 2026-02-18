@@ -23,19 +23,35 @@ export default function HistoryScreen() {
     setLoading(true);
     try {
       const allSessions = await getAllSessions();
-      // Filter to show only unique in-progress session numbers
-      const seen = new Set<number>();
-      const uniqueSessions = allSessions.filter(session => {
-        if (session.completed) {
-          return true; // Always show completed sessions
+      // Deduplicate sessions: for each session number, keep only the latest completed version
+      // If no completed version exists, keep the in-progress version
+      const sessionMap = new Map<number, WorkoutSession>();
+      
+      for (const session of allSessions) {
+        const existing = sessionMap.get(session.sessionNumber);
+        
+        if (!existing) {
+          // First time seeing this session number
+          sessionMap.set(session.sessionNumber, session);
+        } else {
+          // We've seen this session number before
+          if (session.completed && !existing.completed) {
+            // Replace in-progress with completed
+            sessionMap.set(session.sessionNumber, session);
+          } else if (session.completed && existing.completed) {
+            // Both completed - keep the one with the latest completion time
+            const existingTime = new Date(existing.completedAt || 0).getTime();
+            const newTime = new Date(session.completedAt || 0).getTime();
+            if (newTime > existingTime) {
+              sessionMap.set(session.sessionNumber, session);
+            }
+          }
+          // If existing is completed and new is in-progress, keep existing
+          // If both are in-progress, keep the first one
         }
-        // For in-progress sessions, only show the first occurrence of each session number
-        if (seen.has(session.sessionNumber)) {
-          return false;
-        }
-        seen.add(session.sessionNumber);
-        return true;
-      });
+      }
+      
+      const uniqueSessions = Array.from(sessionMap.values());
       setSessions(uniqueSessions);
     } catch (error) {
       console.error('Error loading sessions:', error);

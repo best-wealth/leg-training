@@ -375,3 +375,7 @@
 
 ## Phase 60: Fix Workout Summary Display
 - [x] Fix summary page to show complete workout summary before PR records
+
+## Phase 61: Fix Session Deduplication
+- [x] Remove duplicate sessions showing both in-progress and completed versions
+- [x] Use the last completed time when deduplicating sessions
