@@ -1,42 +1,49 @@
-import express from 'express';
 import { spawn } from 'child_process';
+import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Start Metro bundler in the background
+// Start Expo Metro bundler
+console.log('Starting Expo Metro bundler...');
 const metro = spawn('npx', ['expo', 'start', '--web', '--no-clear'], {
   cwd: __dirname,
   stdio: 'inherit',
   env: { ...process.env, EXPO_PORT: '3000' }
 });
 
-// Wait for Metro to start, then proxy requests
+// Wait for Metro to start, then create proxy server
 setTimeout(() => {
-  app.use((req, res, next) => {
-    const url = `http://localhost:3000${req.url}`;
-    fetch(url)
-      .then(response => {
-        res.status(response.status);
-        response.headers.forEach((value, name) => {
-          res.setHeader(name, value);
-        });
-        response.body.pipe(res);
-      })
-      .catch(err => {
-        console.error('Proxy error:', err);
-        res.status(500).send('Error');
-      });
+  const server = http.createServer((req, res) => {
+    const options = {
+      hostname: 'localhost',
+      port: 3000,
+      path: req.url,
+      method: req.method,
+      headers: req.headers
+    };
+
+    const proxyReq = http.request(options, (proxyRes) => {
+      res.writeHead(proxyRes.statusCode, proxyRes.headers);
+      proxyRes.pipe(res);
+    });
+
+    proxyReq.on('error', (err) => {
+      console.error('Proxy error:', err);
+      res.writeHead(500);
+      res.end('Internal Server Error');
+    });
+
+    req.pipe(proxyReq);
   });
 
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-}, 5000);
 
-process.on('exit', () => {
-  metro.kill();
-});
+  process.on('exit', () => {
+    metro.kill();
+  });
+}, 3000);
