@@ -23,7 +23,20 @@ export default function HistoryScreen() {
     setLoading(true);
     try {
       const allSessions = await getAllSessions();
-      setSessions(allSessions);
+      // Filter to show only unique in-progress session numbers
+      const seen = new Set<number>();
+      const uniqueSessions = allSessions.filter(session => {
+        if (session.completed) {
+          return true; // Always show completed sessions
+        }
+        // For in-progress sessions, only show the first occurrence of each session number
+        if (seen.has(session.sessionNumber)) {
+          return false;
+        }
+        seen.add(session.sessionNumber);
+        return true;
+      });
+      setSessions(uniqueSessions);
     } catch (error) {
       console.error('Error loading sessions:', error);
     } finally {

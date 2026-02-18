@@ -1,10 +1,11 @@
-import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity, Alert } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity, Alert, Pressable, Platform } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import { getSessionById } from "@/lib/workout-utils";
 import { WorkoutSession } from "@/lib/types";
 import { generateSessionShareMessage, shareNatively } from "@/lib/social-share";
+import { PressableStateCallbackType } from "react-native";
 
 export default function SessionDetailScreen() {
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
@@ -27,6 +28,8 @@ export default function SessionDetailScreen() {
     }
   };
 
+  const router = useRouter();
+
   const handleShareSession = async () => {
     if (!session) return;
     try {
@@ -38,6 +41,18 @@ export default function SessionDetailScreen() {
     } catch (error) {
       console.error('Error sharing session:', error);
       Alert.alert('Share Error', 'Failed to share session');
+    }
+  };
+
+  const handleContinueWorkout = () => {
+    if (Platform.OS !== "web") {
+    }
+    
+    if (session && !session.completed) {
+      router.push({
+        pathname: "/workout/active" as any,
+        params: { sessionId: session.sessionId },
+      });
     }
   };
 
@@ -88,6 +103,22 @@ export default function SessionDetailScreen() {
               </View>
             </View>
           </View>
+
+          {/* Continue Workout Button - Only show if session is in progress */}
+          {!session.completed && (
+            <Pressable
+              onPress={handleContinueWorkout}
+              style={({ pressed }: PressableStateCallbackType) => ({
+                transform: [{ scale: pressed ? 0.97 : 1 }],
+                opacity: pressed ? 0.9 : 1,
+              })}
+              className="bg-primary px-8 py-4 rounded-full w-full"
+            >
+              <Text className="text-white text-center font-bold text-lg">
+                Continue Workout
+              </Text>
+            </Pressable>
+          )}
 
           {/* Exercise List */}
           <View className="gap-3">

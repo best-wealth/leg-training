@@ -368,3 +368,7 @@
 - [x] Fix post-workout flow: show summary → PRs → home (not Exercise 1)
 - [x] Only show "Next PR" button if more PRs exist
 - [x] Show "Continue" button linking to home when no more PRs
+
+## Phase 59: Fix History Page
+- [x] Remove duplicate in-progress session numbers (show only unique)
+- [x] Add "Continue Workout" button above exercises heading in session details
