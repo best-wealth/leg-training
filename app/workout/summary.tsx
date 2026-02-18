@@ -34,11 +34,7 @@ export default function WorkoutSummaryScreen() {
     loadSessionAndExercises();
   }, [sessionId]);
 
-  useEffect(() => {
-    if (session && !showingBadges && !showingPRs && !showingSummary) {
-      handleDone();
-    }
-  }, [session, showingBadges, showingPRs, showingSummary]);
+  // Removed automatic handleDone() - it should only be called when user clicks Done button
 
   const loadSessionAndExercises = async () => {
     setLoading(true);

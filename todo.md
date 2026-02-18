@@ -379,3 +379,6 @@
 ## Phase 61: Fix Session Deduplication
 - [x] Remove duplicate sessions showing both in-progress and completed versions
 - [x] Use the last completed time when deduplicating sessions
+
+## Phase 62: Fix Workout Summary Page Skip Bug
+- [x] Fix post-workout flow to show summary page instead of skipping to home
