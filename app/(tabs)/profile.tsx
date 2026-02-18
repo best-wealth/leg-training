@@ -101,6 +101,14 @@ export default function ProfileScreen() {
               from your completed sessions.
             </Text>
           </View>
+
+          {/* Contact Section */}
+          <View className="gap-2 pt-4 border-t border-border">
+            <View className="flex-row items-center gap-2">
+              <Text className="text-base font-semibold text-foreground">Contact:</Text>
+              <Text className="text-base text-muted">bestw3alth@gmail.com</Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </ScreenContainer>
