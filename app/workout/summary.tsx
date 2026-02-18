@@ -1,4 +1,4 @@
-
+import { ScrollView, Text, View, ActivityIndicator, Pressable, PressableStateCallbackType, Platform } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
@@ -8,7 +8,6 @@ import { getExerciseById } from "@/lib/combined-exercises";
 import { checkAndUnlockBadges } from "@/lib/badge-tracker";
 import { BADGES } from "@/lib/badges";
 import { checkForNewPRs, PRNotification } from "@/lib/pr-tracker";
-import { Platform, ScrollView, Text, View, ActivityIndicator, Pressable, PressableStateCallbackType } from "react-native";
 
 interface ExerciseWithWeight {
   name: string;
@@ -29,16 +28,17 @@ export default function WorkoutSummaryScreen() {
   const [newPRs, setNewPRs] = useState<PRNotification[]>([]);
   const [showingPRs, setShowingPRs] = useState(false);
   const [currentPRIndex, setCurrentPRIndex] = useState(0);
+  const [showingSummary, setShowingSummary] = useState(true);
 
   useEffect(() => {
     loadSessionAndExercises();
   }, [sessionId]);
 
   useEffect(() => {
-    if (session && !showingBadges && !showingPRs) {
+    if (session && !showingBadges && !showingPRs && !showingSummary) {
       handleDone();
     }
-  }, [session]);
+  }, [session, showingBadges, showingPRs, showingSummary]);
 
   const loadSessionAndExercises = async () => {
     setLoading(true);
@@ -49,8 +49,6 @@ export default function WorkoutSummaryScreen() {
       }
       console.log('📊 Loaded session:', { sessionId: loadedSession.sessionId, completed: loadedSession.completed, exerciseCount: loadedSession.exercises.length });
       setSession(loadedSession);
-
-      // Settings loading removed to fix String to Boolean cast error
 
       const exercises: ExerciseWithWeight[] = [];
       for (const exerciseLog of loadedSession.exercises) {
@@ -130,6 +128,7 @@ export default function WorkoutSummaryScreen() {
       if (prs.length > 0) {
         setNewPRs(prs);
         setShowingPRs(true);
+        setShowingSummary(false);
         setCurrentPRIndex(0);
         if (Platform.OS !== "web") {
         }
@@ -143,6 +142,7 @@ export default function WorkoutSummaryScreen() {
       if (unlockedBadges.length > 0) {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
+        setShowingSummary(false);
         if (Platform.OS !== "web") {
         }
         setTimeout(() => {
@@ -161,38 +161,32 @@ export default function WorkoutSummaryScreen() {
     if (currentPRIndex < newPRs.length - 1) {
       setCurrentPRIndex(currentPRIndex + 1);
     } else {
-      // All PRs shown, now check badges
-      setShowingPRs(false);
-      handleBadgesAfterPRs();
+      handleContinueAfterPRs();
     }
   };
 
   const handleContinueAfterPRs = async () => {
     // After all PRs shown, check for badges
     setShowingPRs(false);
+    setShowingSummary(false);
     handleBadgesAfterPRs();
   };
 
   const handleBadgesAfterPRs = async () => {
     try {
       const allSessions = await getAllSessions();
-      console.log('🏆 handleBadgesAfterPRs - checking badges');
       const unlockedBadges = await checkAndUnlockBadges(allSessions, session!);
-      console.log('🏆 handleBadgesAfterPRs - unlocked:', unlockedBadges);
       if (unlockedBadges.length > 0) {
         setNewBadges(unlockedBadges);
         setShowingBadges(true);
-        if (Platform.OS !== "web") {
-        }
         setTimeout(() => {
           navigateToHomepage();
         }, 3000);
       } else {
-        console.log('ℹ️ No badges unlocked, navigating to home');
         navigateToHomepage();
       }
     } catch (error) {
-      console.error('❌ Error checking badges:', error);
+      console.error('Error checking badges:', error);
       navigateToHomepage();
     }
   };
@@ -202,7 +196,7 @@ export default function WorkoutSummaryScreen() {
     router.push("/" as any);
   };
 
-  if (loading) {
+  if (loading || !session) {
     return (
       <ScreenContainer className="items-center justify-center">
         <ActivityIndicator size="large" color="#FF6B35" />
@@ -210,15 +204,7 @@ export default function WorkoutSummaryScreen() {
     );
   }
 
-  if (!session) {
-    return (
-      <ScreenContainer className="items-center justify-center">
-        <Text className="text-foreground">Session not found</Text>
-      </ScreenContainer>
-    );
-  }
-
-  // Show PR notification
+  // Show PRs screen if viewing PRs
   if (showingPRs && newPRs.length > 0) {
     const currentPR = newPRs[currentPRIndex];
     return (
@@ -228,39 +214,19 @@ export default function WorkoutSummaryScreen() {
             <Text className="text-6xl">🏅</Text>
             <Text className="text-3xl font-bold text-foreground text-center">New Personal Record!</Text>
             
-            <View className="bg-surface rounded-xl p-6 border border-primary w-full gap-4">
-              <Text className="text-xl font-bold text-foreground text-center">
-                {currentPR.exerciseName}
+            <View className="bg-surface rounded-xl p-6 border border-primary items-center gap-3 w-full">
+              <Text className="text-lg font-semibold text-foreground text-center">{currentPR.exerciseName}</Text>
+              <Text className="text-5xl font-bold text-primary">
+                {currentPR.newValue.toFixed(1)} {currentPR.unit}
               </Text>
-              
-              <View className="items-center gap-2">
-                <Text className="text-5xl font-bold text-primary">
-                  {currentPR.newValue.toFixed(1)}
-                </Text>
-                <Text className="text-lg text-muted">{currentPR.unit}</Text>
-              </View>
-
-              {currentPR.previousValue > 0 && (
-                <View className="bg-background rounded-lg p-4 gap-2">
-                  <View className="flex-row justify-between">
-                    <Text className="text-sm text-muted">Previous PR</Text>
-                    <Text className="text-sm font-semibold text-foreground">
-                      {currentPR.previousValue.toFixed(1)} {currentPR.unit}
-                    </Text>
-                  </View>
-                  <View className="flex-row justify-between">
-                    <Text className="text-sm text-muted">Improvement</Text>
-                    <Text className="text-sm font-semibold text-success">
-                      +{currentPR.improvementAbsolute.toFixed(1)} {currentPR.unit} ({currentPR.improvementPercentage.toFixed(1)}%)
-                    </Text>
-                  </View>
-                </View>
-              )}
+              <Text className="text-sm text-success font-semibold">
+                +{currentPR.improvementPercentage.toFixed(1)}% improvement
+              </Text>
             </View>
 
             <View className="flex-row gap-2 w-full">
               <Pressable
-                onPress={() => handleSharePR(newPRs[currentPRIndex])}
+                onPress={() => handleSharePR(currentPR)}
                 style={({ pressed }: PressableStateCallbackType) => ({
                   transform: [{ scale: pressed ? 0.97 : 1 }],
                   opacity: pressed ? 0.9 : 1,
@@ -293,47 +259,38 @@ export default function WorkoutSummaryScreen() {
                 </Pressable>
               )}
             </View>
-
-            <Text className="text-xs text-muted text-center">
-              {currentPRIndex + 1} of {newPRs.length} PRs
-            </Text>
           </View>
         </ScrollView>
       </ScreenContainer>
     );
   }
 
-  // Show badge notification
-  if (showingBadges && newBadges.length > 0) {
+  // Show badges screen if unlocked
+  if (showingBadges && newBadges.length > 0 && !showingSummary) {
     return (
       <ScreenContainer className="items-center justify-center p-6">
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View className="items-center gap-6">
             <Text className="text-6xl">🏆</Text>
-            <Text className="text-3xl font-bold text-foreground text-center">New Badges Unlocked!</Text>
+            <Text className="text-3xl font-bold text-foreground text-center">New Badge Unlocked!</Text>
             
-            <View className="gap-4 w-full">
-              {newBadges.map((badgeId) => {
-                const badge = BADGES[badgeId as keyof typeof BADGES];
-                return (
-                  <View key={badgeId} className="bg-surface rounded-xl p-4 border border-primary items-center gap-2">
-                    <Text className="text-5xl">{badge.icon}</Text>
-                    <Text className="text-lg font-bold text-foreground text-center">{badge.name}</Text>
-                    <Text className="text-sm text-muted text-center">{badge.description}</Text>
-                  </View>
-                );
-              })}
-            </View>
-
-            <Text className="text-sm text-muted text-center mt-4">
-              Redirecting in 3 seconds...
-            </Text>
+            {newBadges.map((badgeId) => {
+              const badge = BADGES[badgeId as keyof typeof BADGES];
+              return badge ? (
+                <View key={badgeId} className="bg-surface rounded-xl p-6 border border-primary items-center gap-3 w-full">
+                  <Text className="text-5xl">{badge.icon}</Text>
+                  <Text className="text-lg font-semibold text-foreground text-center">{badge.name}</Text>
+                  <Text className="text-sm text-muted text-center">{badge.description}</Text>
+                </View>
+              ) : null;
+            })}
           </View>
         </ScrollView>
       </ScreenContainer>
     );
   }
 
+  // Show summary screen (default)
   return (
     <ScreenContainer className="p-6">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -344,91 +301,46 @@ export default function WorkoutSummaryScreen() {
             <Text className="text-lg text-muted">Session #{session.sessionNumber}</Text>
           </View>
 
-          <View className="bg-primary rounded-2xl p-6 items-center gap-2">
-            <Text className="text-white text-sm">Total Exercises Completed</Text>
-            <Text className="text-5xl font-bold text-white">{session.exercises.length}</Text>
+          {/* Summary Stats */}
+          <View className="bg-surface rounded-xl p-4 border border-border gap-3">
+            <View className="flex-row justify-between">
+              <Text className="text-muted">Duration</Text>
+              <Text className="text-foreground font-semibold">~45 min</Text>
+            </View>
+            <View className="flex-row justify-between">
+              <Text className="text-muted">Exercises Completed</Text>
+              <Text className="text-foreground font-semibold">{session.exercises.filter(e => e.completed).length}/{session.exercises.length}</Text>
+            </View>
           </View>
 
+          {/* Weight Exercises Summary */}
           {weightExercises.length > 0 && (
-            <View className="gap-3">
+            <View className="gap-2">
               <Text className="text-lg font-bold text-foreground">Weight Exercises</Text>
-              
               {weightExercises.map((exercise, index) => (
-                <View key={index} className="bg-surface rounded-xl p-4 border border-border">
-                  <Text className="text-base font-semibold text-foreground mb-2">
-                    {exercise.name}
-                  </Text>
-                  
-                  <View className="gap-1">
-                    {exercise.boxJumpInches !== undefined && (
-                      <View className="flex-row justify-between items-center">
-                        <Text className="text-sm text-muted">Box Jump Height</Text>
-                        <Text className="text-sm font-semibold text-foreground">
-                          {exercise.boxJumpInches.toFixed(1)} in
-                        </Text>
-                      </View>
-                    )}
-                    
-                    {(exercise.weightKg !== undefined || exercise.weightLb !== undefined) && (
-                      <>
-                        {defaultWeightUnit === 'kg' && exercise.weightKg !== undefined && (
-                          <View className="flex-row justify-between items-center">
-                            <Text className="text-sm text-muted">Weight</Text>
-                            <Text className="text-sm font-semibold text-foreground">
-                              {exercise.weightKg.toFixed(1)} kg
-                            </Text>
-                          </View>
-                        )}
-                        {defaultWeightUnit === 'lb' && exercise.weightLb !== undefined && (
-                          <View className="flex-row justify-between items-center">
-                            <Text className="text-sm text-muted">Weight</Text>
-                            <Text className="text-sm font-semibold text-foreground">
-                              {exercise.weightLb.toFixed(1)} lb
-                            </Text>
-                          </View>
-                        )}
-                        {defaultWeightUnit === 'kg' && exercise.weightLb !== undefined && !exercise.weightKg && (
-                          <View className="flex-row justify-between items-center">
-                            <Text className="text-sm text-muted">Weight</Text>
-                            <Text className="text-sm font-semibold text-foreground">
-                              {exercise.weightLb.toFixed(1)} lb
-                            </Text>
-                          </View>
-                        )}
-                        {defaultWeightUnit === 'lb' && exercise.weightKg !== undefined && !exercise.weightLb && (
-                          <View className="flex-row justify-between items-center">
-                            <Text className="text-sm text-muted">Weight</Text>
-                            <Text className="text-sm font-semibold text-foreground">
-                              {exercise.weightKg.toFixed(1)} kg
-                            </Text>
-                          </View>
-                        )}
-                      </>
-                    )}
-                  </View>
+                <View key={index} className="bg-surface rounded-lg p-3 border border-border">
+                  <Text className="text-foreground font-semibold">{exercise.name}</Text>
+                  {exercise.weightKg && (
+                    <Text className="text-sm text-muted mt-1">
+                      {exercise.weightKg} kg ({exercise.weightLb?.toFixed(1)} lb)
+                    </Text>
+                  )}
+                  {exercise.boxJumpInches && (
+                    <Text className="text-sm text-muted mt-1">
+                      {exercise.boxJumpInches} inches
+                    </Text>
+                  )}
                 </View>
               ))}
             </View>
           )}
 
-          <View className="gap-2">
-            <View className="bg-surface rounded-xl p-4 border border-border flex-row justify-between">
-              <Text className="text-sm text-muted">Session Date</Text>
-              <Text className="text-sm font-semibold text-foreground">
-                {new Date(session.startedAt).toLocaleDateString()}
-              </Text>
-            </View>
-            <View className="bg-surface rounded-xl p-4 border border-border flex-row justify-between">
-              <Text className="text-sm text-muted">Session Time</Text>
-              <Text className="text-sm font-semibold text-foreground">
-                {new Date(session.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </Text>
-            </View>
-          </View>
-
           <View className="gap-3 mt-4">
             <Pressable
-              onPress={handleDone}
+              onPress={() => {
+                setShowingSummary(false);
+                handleDone();
+              }}
               style={({ pressed }: PressableStateCallbackType) => ({
                 transform: [{ scale: pressed ? 0.97 : 1 }],
                 opacity: pressed ? 0.9 : 1,

@@ -372,3 +372,6 @@
 ## Phase 59: Fix History Page
 - [x] Remove duplicate in-progress session numbers (show only unique)
 - [x] Add "Continue Workout" button above exercises heading in session details
+
+## Phase 60: Fix Workout Summary Display
+- [x] Fix summary page to show complete workout summary before PR records
