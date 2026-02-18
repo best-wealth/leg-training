@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 // Start Expo Metro bundler
 console.log('Starting Expo Metro bundler...');
-const metro = spawn('npx', ['expo', 'start', '--web', '--no-clear'], {
+const metro = spawn('npx', ['expo', 'start', '--web'], {
   cwd: __dirname,
   stdio: 'inherit',
   env: { ...process.env, EXPO_PORT: '3000' }
@@ -46,4 +46,4 @@ setTimeout(() => {
   process.on('exit', () => {
     metro.kill();
   });
-}, 3000);
+}, 10000);
