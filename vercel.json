@@ -1,14 +1,8 @@
 {
   "buildCommand": "echo 'Build complete'",
-  "devCommand": "node server.js",
-  "framework": "other",
+  "devCommand": "node server-static.js",
   "installCommand": "pnpm install",
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "server.js": {
-      "runtime": "nodejs20.x"
-    }
   }
 }
