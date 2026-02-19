@@ -1,8 +1,0 @@
-{
-  "buildCommand": "echo 'Build complete'",
-  "devCommand": "node server-static.js",
-  "installCommand": "pnpm install",
-  "env": {
-    "NODE_ENV": "production"
-  }
-}
