@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import LoginScreen from './login';
 
-export function AuthWrapper() {
+export default function AuthWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Default to authenticated
   const [isLoading, setIsLoading] = useState(true);
 
